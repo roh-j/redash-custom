@@ -55,6 +55,8 @@
     "d3": "^3.5.17",
     "debug": "^3.2.7",
     "dompurify": "^2.0.17",
+    "echarts": "^5.6.0",
+    "echarts-for-react": "^3.0.2",
     "elliptic": "^6.6.0",
     "font-awesome": "^4.7.0",
     "history": "^4.10.1",
