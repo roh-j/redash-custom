@@ -7,27 +7,39 @@ import { RendererPropTypes } from "@/visualizations/prop-types";
 import "./index.less";
 
 export default function Renderer({ data, options }: any) {
-  const echartsInstanceRef = useRef<any>(null);
+  const echartsRef = useRef<any>(null);
+  const [echarts, setEcharts] = useState<any>(null);
   const [echartsInstance, setEchartsInstance] = useState<any>(null);
   const [selected, setSelected] = useState<string[]>([]);
 
   const rows = data.rows;
 
   useEffect(() => {
-    if (!echartsInstanceRef.current) {
+    const newSelected = selected.map((item: any) => {
+      if (options.selectableColumns.find((column: any) => column === item)) {
+        return item;
+      }
+    });
+
+    setSelected(newSelected);
+  }, [options.selectableColumns]);
+
+  useEffect(() => {
+    if (!echartsRef.current) {
       return;
     }
 
-    setEchartsInstance(echartsInstanceRef.current.echarts);
-  }, [echartsInstanceRef.current]);
+    setEcharts(echartsRef.current.echarts);
+    setEchartsInstance(echartsRef.current.getEchartsInstance());
+  }, []);
 
   const handleGetOptions = () => {
     let result = {};
 
     if (options.echartsOptions) {
       try {
-        const getOptions = new Function("rows", "echartsInstance", "selected", options.echartsOptions);
-        const funcResult = getOptions(rows, echartsInstance, selected);
+        const getOptions = new Function("rows", "echarts", "echartsInstance", "selected", options.echartsOptions);
+        const funcResult = getOptions(rows, echarts, echartsInstance, selected);
 
         if (funcResult) {
           result = funcResult;
@@ -43,7 +55,7 @@ export default function Renderer({ data, options }: any) {
   return (
     <div className="echarts-visualization-container">
       <ReactECharts
-        ref={echartsInstanceRef}
+        ref={echartsRef}
         notMerge={true}
         lazyUpdate={true}
         option={handleGetOptions()}

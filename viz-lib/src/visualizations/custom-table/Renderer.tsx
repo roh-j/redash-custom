@@ -80,7 +80,7 @@ SearchInput.defaultProps = {
   onChange: () => {},
 };
 
-export default function Renderer({ options, data, selected, setSelected }: any) {
+export default function Renderer({ data, options, selected, setSelected }: any) {
   const [searchTerm, setSearchTerm] = useState("");
   const [orderBy, setOrderBy] = useState([]);
 

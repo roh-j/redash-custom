@@ -66,7 +66,7 @@ export function prepareColumns(
   const orderByInfo = getOrderByInfo(orderBy);
 
   const getSelectableColumnStyle = (columnName: any) => {
-    if (!selectableColumns.find((item: any) => item === columnName)) {
+    if (!selectableColumns || !selectableColumns.find((item: any) => item === columnName)) {
       return {};
     }
 
@@ -113,7 +113,7 @@ export function prepareColumns(
                   event.stopPropagation();
                 }
 
-                if (selectableColumns.find((item: any) => item === column.name)) {
+                if (selectableColumns && selectableColumns.find((item: any) => item === column.name)) {
                   onColumnClick(column.name);
                 }
               }}

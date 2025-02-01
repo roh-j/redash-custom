@@ -11,8 +11,8 @@ export default createTabbedEditor([
   {
     key: "Columns",
     title: "Columns",
-    component: ({ data, options, onOptionsChange }: any) =>
-      ColumnsSettings({ options: getOptions(options, { columns: data.columns }), onOptionsChange }),
+    component: ({ visualizationName, data, options, onOptionsChange }: any) =>
+      ColumnsSettings({ visualizationName, options: getOptions(options, { columns: data.columns }), onOptionsChange }),
   },
   { key: "Grid", title: "Grid", component: GridSettings },
 ]);

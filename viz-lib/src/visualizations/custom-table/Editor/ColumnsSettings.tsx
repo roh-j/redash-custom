@@ -18,7 +18,7 @@ const { Text } = Typography;
 
 const SortableItem = sortableElement(Collapse.Panel);
 
-export default function ColumnsSettings({ options, onOptionsChange }: any) {
+export default function ColumnsSettings({ visualizationName, options, onOptionsChange }: any) {
   function handleColumnChange(newColumn: any, event: any) {
     if (event) {
       event.stopPropagation();
@@ -80,7 +80,15 @@ export default function ColumnsSettings({ options, onOptionsChange }: any) {
               </React.Fragment>
             }
             extra={
-              <div style={{ display: "flex", alignItems: "center" }}>
+              <div
+                style={{
+                  ...(visualizationName === "ECharts"
+                    ? {
+                        display: "flex",
+                        alignItems: "center",
+                      }
+                    : {}),
+                }}>
                 <Tooltip title="Toggle visibility" mouseEnterDelay={0} mouseLeaveDelay={0}>
                   {column.visible ? (
                     <EyeOutlinedIcon
@@ -94,14 +102,19 @@ export default function ColumnsSettings({ options, onOptionsChange }: any) {
                     />
                   )}
                 </Tooltip>
-                <Tooltip title="Selectable column">
-                  <div className="m-l-10">
-                    <Checkbox
-                      defaultChecked={options.selectableColumns.find((item: any) => item === column.name)}
-                      onClick={event => handleSelectableColumnChange(column.name, event)}
-                    />
-                  </div>
-                </Tooltip>
+                {visualizationName === "ECharts" && (
+                  <Tooltip title="Selectable column">
+                    <div className="m-l-10">
+                      <Checkbox
+                        defaultChecked={
+                          options.selectableColumns &&
+                          options.selectableColumns.find((item: any) => item === column.name)
+                        }
+                        onClick={event => handleSelectableColumnChange(column.name, event)}
+                      />
+                    </div>
+                  </Tooltip>
+                )}
               </div>
             }>
             {/* @ts-expect-error ts-migrate(2322) FIXME: Type '(newColumn: any, event: any) => void' is not... Remove this comment to see the full error message */}
