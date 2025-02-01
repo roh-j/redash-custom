@@ -12,6 +12,7 @@ import EyeOutlinedIcon from "@ant-design/icons/EyeOutlined";
 import EyeInvisibleOutlinedIcon from "@ant-design/icons/EyeInvisibleOutlined";
 
 import ColumnEditor from "./ColumnEditor";
+import { Checkbox } from "antd";
 
 const { Text } = Typography;
 
@@ -30,6 +31,22 @@ export default function ColumnsSettings({ options, onOptionsChange }: any) {
     const columns = [...options.columns];
     columns.splice(newIndex, 0, ...columns.splice(oldIndex, 1));
     onOptionsChange({ columns });
+  }
+
+  function handleSelectableColumnChange(columnName: any, event: any) {
+    if (event) {
+      event.stopPropagation();
+    }
+
+    const findedIndex = options.selectableColumns.findIndex((item: any) => item === columnName);
+
+    if (findedIndex !== -1) {
+      options.selectableColumns.splice(findedIndex, 1);
+    } else {
+      options.selectableColumns.push(columnName);
+    }
+
+    onOptionsChange({ selectableColumns: options.selectableColumns });
   }
 
   return (
@@ -63,19 +80,29 @@ export default function ColumnsSettings({ options, onOptionsChange }: any) {
               </React.Fragment>
             }
             extra={
-              <Tooltip title="Toggle visibility" mouseEnterDelay={0} mouseLeaveDelay={0}>
-                {column.visible ? (
-                  <EyeOutlinedIcon
-                    data-test={`CustomTable.Column.${column.name}.Visibility`}
-                    onClick={event => handleColumnChange({ ...column, visible: !column.visible }, event)}
-                  />
-                ) : (
-                  <EyeInvisibleOutlinedIcon
-                    data-test={`CustomTable.Column.${column.name}.Visibility`}
-                    onClick={event => handleColumnChange({ ...column, visible: !column.visible }, event)}
-                  />
-                )}
-              </Tooltip>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <Tooltip title="Toggle visibility" mouseEnterDelay={0} mouseLeaveDelay={0}>
+                  {column.visible ? (
+                    <EyeOutlinedIcon
+                      data-test={`CustomTable.Column.${column.name}.Visibility`}
+                      onClick={event => handleColumnChange({ ...column, visible: !column.visible }, event)}
+                    />
+                  ) : (
+                    <EyeInvisibleOutlinedIcon
+                      data-test={`CustomTable.Column.${column.name}.Visibility`}
+                      onClick={event => handleColumnChange({ ...column, visible: !column.visible }, event)}
+                    />
+                  )}
+                </Tooltip>
+                <Tooltip title="Selectable column">
+                  <div className="m-l-10">
+                    <Checkbox
+                      defaultChecked={options.selectableColumns.find((item: any) => item === column.name)}
+                      onClick={event => handleSelectableColumnChange(column.name, event)}
+                    />
+                  </div>
+                </Tooltip>
+              </div>
             }>
             {/* @ts-expect-error ts-migrate(2322) FIXME: Type '(newColumn: any, event: any) => void' is not... Remove this comment to see the full error message */}
             <ColumnEditor column={column} onChange={handleColumnChange} />

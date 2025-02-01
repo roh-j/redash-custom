@@ -1,7 +1,7 @@
+import CustomTableRenderer from "../../custom-table/Renderer";
 import getOptions from "@/visualizations/custom-table/getOptions";
 import React, { useEffect, useRef, useState } from "react";
 import ReactECharts from "echarts-for-react";
-import CustomTableRenderer from "../../custom-table/Renderer";
 import { RendererPropTypes } from "@/visualizations/prop-types";
 
 import "./index.less";
@@ -9,6 +9,7 @@ import "./index.less";
 export default function Renderer({ data, options }: any) {
   const echartsInstanceRef = useRef<any>(null);
   const [echartsInstance, setEchartsInstance] = useState<any>(null);
+  const [selected, setSelected] = useState<string[]>([]);
 
   const rows = data.rows;
 
@@ -25,13 +26,15 @@ export default function Renderer({ data, options }: any) {
 
     if (options.echartsOptions) {
       try {
-        const getOptions = new Function("rows", "echartsInstance", options.echartsOptions);
-        const funcResult = getOptions(rows, echartsInstance);
+        const getOptions = new Function("rows", "echartsInstance", "selected", options.echartsOptions);
+        const funcResult = getOptions(rows, echartsInstance, selected);
 
         if (funcResult) {
           result = funcResult;
         }
-      } catch (error) {}
+      } catch (error) {
+        console.error(error);
+      }
     }
 
     return result;
@@ -39,9 +42,22 @@ export default function Renderer({ data, options }: any) {
 
   return (
     <div className="echarts-visualization-container">
-      <ReactECharts ref={echartsInstanceRef} notMerge={true} lazyUpdate={true} option={handleGetOptions()} />
+      <ReactECharts
+        ref={echartsInstanceRef}
+        notMerge={true}
+        lazyUpdate={true}
+        option={handleGetOptions()}
+        style={{
+          ...(!Object.keys(handleGetOptions()).length && { background: "#fafafa" }),
+        }}
+      />
       {options.table.enabled && (
-        <CustomTableRenderer data={data} options={getOptions(options, { columns: data.columns })} />
+        <CustomTableRenderer
+          data={data}
+          options={getOptions(options, { columns: data.columns })}
+          selected={selected}
+          setSelected={setSelected}
+        />
       )}
     </div>
   );

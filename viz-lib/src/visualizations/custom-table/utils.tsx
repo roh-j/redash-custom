@@ -50,12 +50,32 @@ function getOrderByInfo(orderBy: any) {
   return result;
 }
 
-export function prepareColumns(columns: any, searchInput: any, orderBy: any, onOrderByChange: any) {
+export function prepareColumns(
+  columns: any,
+  selectableColumns: any,
+  selected: any,
+  searchInput: any,
+  orderBy: any,
+  onOrderByChange: any,
+  onColumnClick: any
+) {
   columns = filter(columns, "visible");
   columns = sortBy(columns, "order");
 
   const isMultiColumnSort = orderBy.length > 1;
   const orderByInfo = getOrderByInfo(orderBy);
+
+  const getSelectableColumnStyle = (columnName: any) => {
+    if (!selectableColumns.find((item: any) => item === columnName)) {
+      return {};
+    }
+
+    if (selected && selected.find((item: any) => item === columnName)) {
+      return { borderBottom: "2px solid #2196f3" };
+    }
+
+    return { borderBottom: "2px solid #767676" };
+  };
 
   let tableColumns = map(columns, column => {
     // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
@@ -84,7 +104,20 @@ export function prepareColumns(columns: any, searchInput: any, orderBy: any, onO
             </span>
           )}
           <Tooltip placement="top" title={column.title}>
-            <div className="custom-table-visualization-heading" data-sort-column-index={sortColumnIndex}>
+            <div
+              className="custom-table-visualization-heading"
+              data-sort-column-index={sortColumnIndex}
+              onClick={(event: any) => {
+                if (event) {
+                  event.preventDefault();
+                  event.stopPropagation();
+                }
+
+                if (selectableColumns.find((item: any) => item === column.name)) {
+                  onColumnClick(column.name);
+                }
+              }}
+              style={getSelectableColumnStyle(column.name)}>
               {column.title}
             </div>
           </Tooltip>

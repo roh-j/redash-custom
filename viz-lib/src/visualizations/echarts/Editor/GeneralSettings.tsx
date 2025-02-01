@@ -12,7 +12,7 @@ type Columns = {
   value: string;
 };
 
-export default function GeneralSettings({ options, data, visualizationName, onOptionsChange }: any) {
+export default function GeneralSettings({ options, data, onOptionsChange }: any) {
   const editorRef = useRef<any>(null);
   const columns: Columns[] = data.columns.map(({ name }: any) => ({
     label: name,
@@ -67,9 +67,12 @@ export default function GeneralSettings({ options, data, visualizationName, onOp
       {/* @ts-expect-error ts-migrate(2745) FIXME: This JSX tag's 'children' prop expects type 'never... Remove this comment to see the full error message */}
       <Section>
         <p>
-          <span style={{ color: "blue" }}>function</span> <span style={{ color: "#0000A2" }}>getOptions</span>(
-          <span style={{ color: "rgb(49, 132, 149)" }}>rows</span>,{" "}
-          <span style={{ color: "rgb(49, 132, 149)" }}>echartsInstance</span>) {"{"} {"}"}
+          <span style={{ color: "blue" }}>function</span> <span style={{ color: "#0000A2" }}>getOptions</span>
+          <b>(</b>
+          <span style={{ color: "rgb(49, 132, 149)" }}>rows</span>
+          <b>,</b> <span style={{ color: "rgb(49, 132, 149)" }}>echartsInstance</span>
+          <b>,</b> <span style={{ color: "rgb(49, 132, 149)" }}>selected</span>
+          <b>)</b> <b>{"{"}</b> <b>{"}"}</b>
         </p>
         <AceEditor
           ref={editorRef}

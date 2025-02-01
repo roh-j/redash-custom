@@ -4,6 +4,7 @@ import { merge } from "lodash";
 
 const DEFAULT_OPTIONS = {
   echartsOptions: "",
+  selectableColumns: [],
   table: {
     enabled: false,
   },

@@ -1,9 +1,8 @@
 import React from "react";
 import { merge } from "lodash";
-import { Section } from "@/components/visualizations/editor";
-import { Switch } from "antd";
+import { Section, Switch } from "@/components/visualizations/editor";
 
-export default function TableSettings({ options, data, visualizationName, onOptionsChange }: any) {
+export default function TableSettings({ options, onOptionsChange }: any) {
   const updateOptions = (updates: any) => {
     onOptionsChange(merge({}, options, updates));
   };
@@ -14,8 +13,9 @@ export default function TableSettings({ options, data, visualizationName, onOpti
       <Section>
         {/* @ts-expect-error ts-migrate(2745) FIXME: This JSX tag's 'children' prop expects type 'never... Remove this comment to see the full error message */}
         <Switch
-          id="echarts-show-table"
+          // @ts-expect-error ts-migrate(2322) FIXME: Type 'any' is not assignable to type 'never'.
           defaultChecked={options.table.enabled}
+          // @ts-expect-error ts-migrate(2322) FIXME: Type '(enabled: any) => any' is not assignable to ... Remove this comment to see the full error message
           onChange={(enabled: any) => updateOptions({ table: { enabled: enabled } })}>
           Show Table
         </Switch>

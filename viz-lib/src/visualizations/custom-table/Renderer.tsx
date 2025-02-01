@@ -80,7 +80,7 @@ SearchInput.defaultProps = {
   onChange: () => {},
 };
 
-export default function Renderer({ options, data }: any) {
+export default function Renderer({ options, data, selected, setSelected }: any) {
   const [searchTerm, setSearchTerm] = useState("");
   const [orderBy, setOrderBy] = useState([]);
 
@@ -92,12 +92,35 @@ export default function Renderer({ options, data }: any) {
         // @ts-expect-error ts-migrate(2322) FIXME: Type '(event: any) => void' is not assignable to t... Remove this comment to see the full error message
         <SearchInput searchColumns={searchColumns} onChange={(event: any) => setSearchTerm(event.target.value)} />
       ) : null;
-    return prepareColumns(options.columns, searchInput, orderBy, (newOrderBy: any) => {
-      setOrderBy(newOrderBy);
-      // Remove text selection - may occur accidentally
-      // @ts-expect-error ts-migrate(2531) FIXME: Object is possibly 'null'.
-      document.getSelection().removeAllRanges();
-    });
+    return prepareColumns(
+      options.columns,
+      options.selectableColumns,
+      selected,
+      searchInput,
+      orderBy,
+      (newOrderBy: any) => {
+        setOrderBy(newOrderBy);
+        // Remove text selection - may occur accidentally
+        // @ts-expect-error ts-migrate(2531) FIXME: Object is possibly 'null'.
+        document.getSelection().removeAllRanges();
+      },
+      (columnName: any) => {
+        if (!selected) {
+          return;
+        }
+
+        const newSelected = [...selected];
+        const findedIndex = newSelected.findIndex((item: any) => item === columnName);
+
+        if (findedIndex !== -1) {
+          newSelected.splice(findedIndex, 1);
+        } else {
+          newSelected.push(columnName);
+        }
+
+        setSelected(newSelected);
+      }
+    );
   }, [options.columns, searchColumns, orderBy]);
 
   const preparedRows = useMemo(() => sortRows(filterRows(initRows(data.rows), searchTerm, searchColumns), orderBy), [
