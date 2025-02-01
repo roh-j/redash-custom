@@ -56,6 +56,11 @@ function getDefaultColumnsOptions(columns: any) {
     // `string` cell options
     allowHTML: true,
     highlightLinks: false,
+    conditionalFormatting: {
+      enabled: false,
+      backgroundColor: "",
+      condition: "",
+    },
   }));
 }
 

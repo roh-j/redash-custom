@@ -45,7 +45,7 @@ export default function Renderer({ data, options }: any) {
           result = funcResult;
         }
       } catch (error) {
-        console.error(error);
+        return {};
       }
     }
 
@@ -67,6 +67,7 @@ export default function Renderer({ data, options }: any) {
         <CustomTableRenderer
           data={data}
           options={getOptions(options, { columns: data.columns })}
+          // @ts-expect-error ts-migrate(2322) FIXME: Type 'Dispatch<SetStateAction<null>>' is not assig... Remove this comment to see the full error message
           selected={selected}
           setSelected={setSelected}
         />

@@ -1,8 +1,10 @@
 import { isNil, map, get, filter, each, sortBy, some, findIndex, toString } from "lodash";
+import { Parser } from "expr-eval";
 import React from "react";
 import cx from "classnames";
 import Tooltip from "antd/lib/tooltip";
 import ColumnTypes from "./columns";
+import hexRgb from "hex-rgb";
 
 function nextOrderByDirection(direction: any) {
   switch (direction) {
@@ -65,18 +67,6 @@ export function prepareColumns(
   const isMultiColumnSort = orderBy.length > 1;
   const orderByInfo = getOrderByInfo(orderBy);
 
-  const getSelectableColumnStyle = (columnName: any) => {
-    if (!selectableColumns || !selectableColumns.find((item: any) => item === columnName)) {
-      return {};
-    }
-
-    if (selected && selected.find((item: any) => item === columnName)) {
-      return { borderBottom: "2px solid #2196f3" };
-    }
-
-    return { borderBottom: "2px solid #767676" };
-  };
-
   let tableColumns = map(columns, column => {
     // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     const isAscend = orderByInfo[column.name] && orderByInfo[column.name].direction === "ascend";
@@ -85,6 +75,49 @@ export function prepareColumns(
 
     // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     const sortColumnIndex = isMultiColumnSort && orderByInfo[column.name] ? orderByInfo[column.name].index : null;
+
+    const getSelectableColumnStyle = (columnName: any) => {
+      if (!selectableColumns || !selectableColumns.find((item: any) => item === columnName)) {
+        return {};
+      }
+
+      if (selected && selected.find((item: any) => item === columnName)) {
+        return { borderBottom: "2px solid #2196f3" };
+      }
+
+      return { borderBottom: "2px solid #767676" };
+    };
+
+    const getConditionalFormattingStyle = (row: any) => {
+      const enabled = column.conditionalFormatting.enabled;
+      const backgroundColor = column.conditionalFormatting.backgroundColor;
+      const condition = column.conditionalFormatting.condition;
+
+      if (!enabled || !backgroundColor) {
+        return {};
+      }
+
+      const { red, green, blue } = hexRgb(column.conditionalFormatting.backgroundColor);
+      let result = 0;
+
+      try {
+        const parser = new Parser();
+
+        const compiledExpr = parser.parse(condition);
+        const variables = compiledExpr.variables();
+
+        const parameter = variables.reduce((acc: any, key: any) => {
+          acc[key] = row.record[key];
+          return acc;
+        }, {});
+
+        result = compiledExpr.evaluate(parameter);
+      } catch (error) {
+        return {};
+      }
+
+      return { background: `rgba(${red}, ${green}, ${blue}, ${Number(result)})` };
+    };
 
     const result = {
       key: column.name,
@@ -137,7 +170,7 @@ export function prepareColumns(
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ key: a... Remove this comment to see the full error message
     result.render = (unused: any, row: any) => ({
       children: <Component row={row.record} />,
-      props: { className: `display-as-${column.displayAs}` },
+      props: { className: `display-as-${column.displayAs}`, style: getConditionalFormattingStyle(row) },
     });
 
     return result;

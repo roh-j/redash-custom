@@ -2,9 +2,10 @@ import { map, keys } from "lodash";
 import React from "react";
 import { useDebouncedCallback } from "use-debounce";
 import * as Grid from "antd/lib/grid";
-import { Section, Select, Input, Checkbox, TextAlignmentSelect } from "@/components/visualizations/editor";
+import { Section, Select, Input, Checkbox, TextAlignmentSelect, ColorPicker } from "@/components/visualizations/editor";
 
 import ColumnTypes from "../columns";
+import ColorPalette from "@/visualizations/ColorPalette";
 
 type OwnProps = {
   column: {
@@ -13,6 +14,11 @@ type OwnProps = {
     visible?: boolean;
     alignContent?: "left" | "center" | "right";
     displayAs?: any; // TODO: PropTypes.oneOf(keys(ColumnTypes))
+    conditionalFormatting?: {
+      enabled: boolean;
+      backgroundColor: string;
+      condition: string;
+    };
   };
   onChange?: (...args: any[]) => any;
 };
@@ -89,6 +95,69 @@ export default function ColumnEditor({ column, onChange }: Props) {
           ))}
         </Select>
       </Section>
+
+      {/* @ts-expect-error ts-migrate(2745) FIXME: This JSX tag's 'children' prop expects type 'never... Remove this comment to see the full error message */}
+      <Section>
+        <Checkbox
+          data-test={`CustomTable.Column.${column.name}.ConditionalFormatting`}
+          checked={column.conditionalFormatting?.enabled}
+          onChange={event =>
+            handleChange({
+              conditionalFormatting: {
+                ...column.conditionalFormatting,
+                enabled: event.target.checked,
+              },
+            })
+          }>
+          Conditional formatting
+        </Checkbox>
+      </Section>
+
+      {column.conditionalFormatting?.enabled && (
+        <React.Fragment>
+          {/* @ts-expect-error ts-migrate(2745) FIXME: This JSX tag's 'children' prop expects type 'never... Remove this comment to see the full error message */}
+          <Section>
+            <ColorPicker
+              layout="horizontal"
+              label="Background Color"
+              data-test={`CustomTable.Column.${column.name}.ConditionalFormatting.BackgroundColor`}
+              interactive
+              placement="topLeft"
+              presetColors={ColorPalette}
+              color={column.conditionalFormatting?.backgroundColor}
+              onChange={(backgroundColor: any) =>
+                handleChange({
+                  conditionalFormatting: {
+                    ...column.conditionalFormatting,
+                    backgroundColor: backgroundColor,
+                  },
+                })
+              }
+              addonAfter={
+                // @ts-expect-error ts-migrate(2339) FIXME: Property 'Label' does not exist on type '({ classN... Remove this comment to see the full error message
+                <ColorPicker.Label color={column.conditionalFormatting?.backgroundColor} presetColors={ColorPalette} />
+              }
+            />
+          </Section>
+
+          {/* @ts-expect-error ts-migrate(2745) FIXME: This JSX tag's 'children' prop expects type 'never... Remove this comment to see the full error message */}
+          <Section>
+            <Input
+              layout="horizontal"
+              label="Condition"
+              defaultValue={column.conditionalFormatting.condition}
+              onChange={(event: any) =>
+                handleChange({
+                  conditionalFormatting: {
+                    ...column.conditionalFormatting,
+                    condition: event.target.value,
+                  },
+                })
+              }
+            />
+          </Section>
+        </React.Fragment>
+      )}
 
       {AdditionalOptions && <AdditionalOptions column={column} onChange={handleChange} />}
     </div>
