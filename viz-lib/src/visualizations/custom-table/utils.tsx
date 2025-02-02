@@ -91,7 +91,7 @@ export function prepareColumns(
     const getConditionalFormattingStyle = (row: any) => {
       const enabled = column.conditionalFormatting.enabled;
       const backgroundColor = column.conditionalFormatting.backgroundColor;
-      const condition = column.conditionalFormatting.condition;
+      const rule = column.conditionalFormatting.rule;
 
       if (!enabled || !backgroundColor) {
         return {};
@@ -103,7 +103,7 @@ export function prepareColumns(
       try {
         const parser = new Parser();
 
-        const compiledExpr = parser.parse(condition);
+        const compiledExpr = parser.parse(rule);
         const variables = compiledExpr.variables();
 
         const parameter = variables.reduce((acc: any, key: any) => {

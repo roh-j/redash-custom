@@ -59,7 +59,7 @@ function getDefaultColumnsOptions(columns: any) {
     conditionalFormatting: {
       enabled: false,
       backgroundColor: "",
-      condition: "",
+      rule: "",
     },
   }));
 }

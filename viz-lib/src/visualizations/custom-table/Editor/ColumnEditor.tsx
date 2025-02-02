@@ -17,7 +17,7 @@ type OwnProps = {
     conditionalFormatting?: {
       enabled: boolean;
       backgroundColor: string;
-      condition: string;
+      rule: string;
     };
   };
   onChange?: (...args: any[]) => any;
@@ -144,13 +144,13 @@ export default function ColumnEditor({ column, onChange }: Props) {
           <Section>
             <Input
               layout="horizontal"
-              label="Condition"
-              defaultValue={column.conditionalFormatting.condition}
+              label="Rule"
+              defaultValue={column.conditionalFormatting.rule}
               onChange={(event: any) =>
                 handleChange({
                   conditionalFormatting: {
                     ...column.conditionalFormatting,
-                    condition: event.target.value,
+                    rule: event.target.value,
                   },
                 })
               }
