@@ -5,6 +5,7 @@ import cx from "classnames";
 import Tooltip from "antd/lib/tooltip";
 import ColumnTypes from "./columns";
 import hexRgb from "hex-rgb";
+import Checkbox from "antd/lib/checkbox";
 
 function nextOrderByDirection(direction: any) {
   switch (direction) {
@@ -53,6 +54,8 @@ function getOrderByInfo(orderBy: any) {
 }
 
 export function prepareColumns(
+  visibleConditionalFormatting: any,
+  onVisibleConditionalFormattingChange: any,
   columns: any,
   selectableColumns: any,
   selected: any,
@@ -80,7 +83,6 @@ export function prepareColumns(
       if (!selectableColumns || !selectableColumns.find((item: any) => item === columnName)) {
         return {};
       }
-
       if (selected && selected.find((item: any) => item === columnName)) {
         return { borderBottom: "2px solid #2196f3" };
       }
@@ -88,35 +90,42 @@ export function prepareColumns(
       return { borderBottom: "2px solid #767676" };
     };
 
-    const getConditionalFormattingStyle = (row: any) => {
-      const enabled = column.conditionalFormatting.enabled;
-      const backgroundColor = column.conditionalFormatting.backgroundColor;
+    const getRuleExpr = (row: any) => {
       const rule = column.conditionalFormatting.rule;
-
-      if (!enabled || !backgroundColor) {
-        return {};
-      }
-
-      const { red, green, blue } = hexRgb(column.conditionalFormatting.backgroundColor);
-      let result = 0;
+      let result = { variables: [], value: 0 };
 
       try {
         const parser = new Parser();
-
         const compiledExpr = parser.parse(rule);
-        const variables = compiledExpr.variables();
-
+        const variables: any = compiledExpr.variables();
         const parameter = variables.reduce((acc: any, key: any) => {
           acc[key] = row.record[key];
           return acc;
         }, {});
 
-        result = compiledExpr.evaluate(parameter);
-      } catch (error) {
+        result = {
+          variables: variables,
+          value: Number(compiledExpr.evaluate(parameter)),
+        };
+      } catch (error) {}
+
+      return result;
+    };
+
+    const isValidConditionalFormatting = () => {
+      const enabled = column.conditionalFormatting.enabled;
+      const backgroundColor = column.conditionalFormatting.backgroundColor;
+
+      return enabled && backgroundColor && visibleConditionalFormatting;
+    };
+
+    const getConditionalFormattingStyle = (row: any) => {
+      if (!isValidConditionalFormatting()) {
         return {};
       }
 
-      return { background: `rgba(${red}, ${green}, ${blue}, ${Number(result)})` };
+      const { red, green, blue } = hexRgb(column.conditionalFormatting.backgroundColor);
+      return { background: `rgba(${red}, ${green}, ${blue}, ${getRuleExpr(row).value})` };
     };
 
     const result = {
@@ -168,10 +177,24 @@ export function prepareColumns(
     const initColumn = ColumnTypes[column.displayAs];
     const Component = initColumn(column);
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ key: a... Remove this comment to see the full error message
-    result.render = (unused: any, row: any) => ({
-      children: <Component row={row.record} />,
-      props: { className: `display-as-${column.displayAs}`, style: getConditionalFormattingStyle(row) },
-    });
+    result.render = (unused: any, row: any) => {
+      let exprResult: any = {};
+
+      if (isValidConditionalFormatting()) {
+        const { variables, value } = getRuleExpr(row);
+
+        if (value) {
+          variables.forEach(item => {
+            exprResult[item] = value;
+          });
+        }
+      }
+
+      return {
+        children: <Component row={row.record} exprResult={exprResult} />,
+        props: { className: `display-as-${column.displayAs}`, style: getConditionalFormattingStyle(row) },
+      };
+    };
 
     return result;
   });
@@ -200,6 +223,24 @@ export function prepareColumns(
       },
     ];
   }
+
+  tableColumns = [
+    {
+      key: "custom-table-option",
+      title: (
+        <Checkbox
+          checked={visibleConditionalFormatting}
+          onChange={e => {
+            onVisibleConditionalFormattingChange(e.target.checked);
+          }}>
+          Conditional formatting
+        </Checkbox>
+      ),
+      // @ts-expect-error ts-migrate(2741) FIXME: Property 'onClick' is missing in type '{ className... Remove this comment to see the full error message
+      onHeaderCell: () => ({ className: "custom-table-visualization-option" }),
+      children: tableColumns,
+    },
+  ];
 
   return tableColumns;
 }

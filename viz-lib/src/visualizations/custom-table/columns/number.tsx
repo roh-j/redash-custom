@@ -41,10 +41,10 @@ export default function initNumberColumn(column: any) {
     };
   }
 
-  function NumberColumn({ row }: any) {
+  function NumberColumn({ row, exprResult }: any) {
     // eslint-disable-line react/prop-types
     const { text } = prepareData(row);
-    return text;
+    return exprResult[column.name] ? `${text}\n(${exprResult[column.name]})` : text;
   }
 
   NumberColumn.prepareData = prepareData;

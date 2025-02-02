@@ -12,7 +12,7 @@ import EyeOutlinedIcon from "@ant-design/icons/EyeOutlined";
 import EyeInvisibleOutlinedIcon from "@ant-design/icons/EyeInvisibleOutlined";
 
 import ColumnEditor from "./ColumnEditor";
-import { Checkbox } from "antd";
+import Checkbox from "antd/lib/checkbox";
 
 const { Text } = Typography;
 

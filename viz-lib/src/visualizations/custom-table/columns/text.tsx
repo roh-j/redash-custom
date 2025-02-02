@@ -49,10 +49,11 @@ export default function initTextColumn(column: any) {
     };
   }
 
-  function TextColumn({ row }: any) {
+  function TextColumn({ row, exprResult }: any) {
     // eslint-disable-line react/prop-types
     const { text } = prepareData(row);
-    return column.allowHTML ? <HtmlContent>{text}</HtmlContent> : text;
+    const appendedText = exprResult[column.name] ? `${text}\n(${exprResult[column.name]})` : text;
+    return column.allowHTML ? <HtmlContent>{appendedText}</HtmlContent> : appendedText;
   }
 
   TextColumn.prepareData = prepareData;

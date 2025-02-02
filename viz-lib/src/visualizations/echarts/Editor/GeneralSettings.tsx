@@ -1,7 +1,10 @@
 import AceEditor from "react-ace";
 import Beautify from "ace-builds/src-noconflict/ext-beautify";
+import Button from "antd/lib/button";
+import Dropdown from "antd/lib/dropdown";
+import Menu from "antd/lib/menu";
 import React, { useEffect, useRef } from "react";
-import { Button, Dropdown, Menu, Space } from "antd";
+import Space from "antd/lib/space";
 import { DownOutlined } from "@ant-design/icons";
 import { merge } from "lodash";
 import { Section } from "@/components/visualizations/editor";

@@ -58,7 +58,17 @@ export default function Renderer({ data, options }: any) {
         ref={echartsRef}
         notMerge={true}
         lazyUpdate={true}
-        option={handleGetOptions()}
+        option={{
+          ...handleGetOptions(),
+          ...{
+            toolbox: {
+              feature: {
+                restore: {},
+                saveAsImage: {},
+              },
+            },
+          },
+        }}
         style={{
           ...(!Object.keys(handleGetOptions()).length && { background: "#fafafa" }),
         }}

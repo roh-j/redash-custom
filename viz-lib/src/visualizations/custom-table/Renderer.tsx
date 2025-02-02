@@ -81,6 +81,7 @@ SearchInput.defaultProps = {
 };
 
 export default function Renderer({ data, options, selected, setSelected }: any) {
+  const [visibleConditionalFormatting, setVisibleConditionalFormatting] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [orderBy, setOrderBy] = useState([]);
 
@@ -93,6 +94,10 @@ export default function Renderer({ data, options, selected, setSelected }: any) 
         <SearchInput searchColumns={searchColumns} onChange={(event: any) => setSearchTerm(event.target.value)} />
       ) : null;
     return prepareColumns(
+      visibleConditionalFormatting,
+      (newVisibleConditionalFormatting: any) => {
+        setVisibleConditionalFormatting(newVisibleConditionalFormatting);
+      },
       options.columns,
       options.selectableColumns,
       selected,
@@ -121,7 +126,7 @@ export default function Renderer({ data, options, selected, setSelected }: any) 
         setSelected(newSelected);
       }
     );
-  }, [options.columns, searchColumns, orderBy]);
+  }, [visibleConditionalFormatting, options.columns, searchColumns, orderBy]);
 
   const preparedRows = useMemo(() => sortRows(filterRows(initRows(data.rows), searchTerm, searchColumns), orderBy), [
     data.rows,
