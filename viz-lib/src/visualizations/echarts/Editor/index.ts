@@ -3,11 +3,11 @@ import createTabbedEditor from "@/components/visualizations/editor/createTabbedE
 import GeneralSettings from "./GeneralSettings";
 import getOptions from "@/visualizations/custom-table/getOptions";
 import GridSettings from "@/visualizations/custom-table/Editor/GridSettings";
-import TableSettings from "./TableSettings";
+import StyleSettings from "./StyleSettings";
 
 export default createTabbedEditor([
   { key: "General", title: "General", component: GeneralSettings },
-  { key: "Table", title: "Table", component: TableSettings },
+  { key: "Style", title: "Style", component: StyleSettings },
   {
     key: "Columns",
     title: "Columns",

@@ -3,6 +3,7 @@ import Renderer from "./Renderer";
 import { merge } from "lodash";
 
 const DEFAULT_OPTIONS = {
+  height: "",
   echartsOptions: "",
   selectableColumns: [],
   table: {

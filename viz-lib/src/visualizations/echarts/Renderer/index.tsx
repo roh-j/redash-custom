@@ -4,8 +4,6 @@ import React, { useEffect, useRef, useState } from "react";
 import ReactECharts from "echarts-for-react";
 import { RendererPropTypes } from "@/visualizations/prop-types";
 
-import "./index.less";
-
 export default function Renderer({ data, options }: any) {
   const echartsRef = useRef<any>(null);
   const [echarts, setEcharts] = useState<any>(null);
@@ -32,6 +30,43 @@ export default function Renderer({ data, options }: any) {
     setEcharts(echartsRef.current.echarts);
     setEchartsInstance(echartsRef.current.getEchartsInstance());
   }, []);
+
+  useEffect(() => {
+    resizeHandler();
+    window.addEventListener("resize", resizeHandler);
+
+    return () => {
+      window.addEventListener("resize", resizeHandler);
+    };
+  }, [options.height]);
+
+  const resizeTableContainer = (element: any) => {
+    const echartsHeight = options.height || "300px";
+    const childElement = element.querySelector("div");
+
+    element.style.height = `calc(100% - ${echartsHeight})`;
+    element.style.top = echartsHeight;
+
+    if (childElement) {
+      childElement.style.height = "100%";
+    }
+  };
+
+  const resizeHandler = () => {
+    const queryTableContainer = document.querySelectorAll(
+      ".query-fixed-layout .echarts-visualization-container .custom-table-visualization-container"
+    );
+    const widgetTableContainer = document.querySelectorAll(
+      ".widget-visualization .echarts-visualization-container .custom-table-visualization-container"
+    );
+
+    queryTableContainer.forEach((element: any) => {
+      resizeTableContainer(element);
+    });
+    widgetTableContainer.forEach((element: any) => {
+      resizeTableContainer(element);
+    });
+  };
 
   const handleGetOptions = () => {
     let result = {};
@@ -70,6 +105,7 @@ export default function Renderer({ data, options }: any) {
           },
         }}
         style={{
+          height: options.height || "300px",
           ...(!Object.keys(handleGetOptions()).length && { background: "#fafafa" }),
         }}
       />
