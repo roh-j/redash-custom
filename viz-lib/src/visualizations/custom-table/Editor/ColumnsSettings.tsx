@@ -18,7 +18,7 @@ const { Text } = Typography;
 
 const SortableItem = sortableElement(Collapse.Panel);
 
-export default function ColumnsSettings({ visualizationName, options, onOptionsChange }: any) {
+export default function ColumnsSettings({ options, onOptionsChange }: any) {
   function handleColumnChange(newColumn: any, event: any) {
     if (event) {
       event.stopPropagation();
@@ -82,7 +82,7 @@ export default function ColumnsSettings({ visualizationName, options, onOptionsC
             extra={
               <div
                 style={{
-                  ...(visualizationName === "ECharts"
+                  ...(options.selectableColumns
                     ? {
                         display: "flex",
                         alignItems: "center",
@@ -102,8 +102,8 @@ export default function ColumnsSettings({ visualizationName, options, onOptionsC
                     />
                   )}
                 </Tooltip>
-                {visualizationName === "ECharts" && (
-                  <Tooltip title="Selectable column">
+                {options.selectableColumns && (
+                  <Tooltip title="Enable Selection">
                     <div className="m-l-10">
                       <Checkbox
                         defaultChecked={

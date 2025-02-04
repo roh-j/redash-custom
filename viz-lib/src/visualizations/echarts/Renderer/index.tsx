@@ -5,7 +5,9 @@ import ReactECharts from "echarts-for-react";
 import { RendererPropTypes } from "@/visualizations/prop-types";
 
 export default function Renderer({ data, options }: any) {
+  const containerElRef = useRef<any>(null);
   const echartsRef = useRef<any>(null);
+
   const [echarts, setEcharts] = useState<any>(null);
   const [echartsInstance, setEchartsInstance] = useState<any>(null);
   const [selected, setSelected] = useState<string[]>([]);
@@ -38,7 +40,7 @@ export default function Renderer({ data, options }: any) {
     return () => {
       window.addEventListener("resize", resizeHandler);
     };
-  }, [options.height]);
+  }, [options]);
 
   const resizeTableContainer = (element: any) => {
     const echartsHeight = options.height || "300px";
@@ -53,19 +55,15 @@ export default function Renderer({ data, options }: any) {
   };
 
   const resizeHandler = () => {
-    const queryTableContainer = document.querySelectorAll(
-      ".query-fixed-layout .echarts-visualization-container .custom-table-visualization-container"
-    );
-    const widgetTableContainer = document.querySelectorAll(
-      ".widget-visualization .echarts-visualization-container .custom-table-visualization-container"
-    );
+    if (!containerElRef.current) {
+      return;
+    }
 
-    queryTableContainer.forEach((element: any) => {
-      resizeTableContainer(element);
-    });
-    widgetTableContainer.forEach((element: any) => {
-      resizeTableContainer(element);
-    });
+    const tableEl = containerElRef.current.querySelector(".custom-table-visualization-container");
+
+    if (tableEl && (tableEl.closest(".query-fixed-layout") || tableEl.closest(".widget-visualization"))) {
+      resizeTableContainer(tableEl);
+    }
   };
 
   const handleGetOptions = () => {
@@ -88,7 +86,7 @@ export default function Renderer({ data, options }: any) {
   };
 
   return (
-    <div className="echarts-visualization-container">
+    <div ref={containerElRef} className="echarts-visualization-container">
       <ReactECharts
         ref={echartsRef}
         notMerge={true}
