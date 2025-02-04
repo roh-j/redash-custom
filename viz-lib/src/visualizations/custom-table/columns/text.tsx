@@ -1,7 +1,7 @@
 import React from "react";
 import HtmlContent from "@/components/HtmlContent";
 import { Section, Checkbox } from "@/components/visualizations/editor";
-import { createTextFormatter } from "@/lib/value-format";
+import { createNumberFormatter, createTextFormatter } from "@/lib/value-format";
 
 type Props = {
   column: {
@@ -49,10 +49,11 @@ export default function initTextColumn(column: any) {
     };
   }
 
-  function TextColumn({ row, exprResult }: any) {
+  function TextColumn({ row, ruleFormat, ruleResult }: any) {
     // eslint-disable-line react/prop-types
     const { text } = prepareData(row);
-    const appendedText = exprResult[column.name] ? `${text}\n(${exprResult[column.name]})` : text;
+    const format = createNumberFormatter(ruleFormat);
+    const appendedText = ruleResult[column.name] ? `${text}\n(${format(ruleResult[column.name])})` : text;
     return column.allowHTML ? <HtmlContent>{appendedText}</HtmlContent> : appendedText;
   }
 

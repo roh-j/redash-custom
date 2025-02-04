@@ -41,10 +41,11 @@ export default function initNumberColumn(column: any) {
     };
   }
 
-  function NumberColumn({ row, exprResult }: any) {
+  function NumberColumn({ row, ruleFormat, ruleResult }: any) {
     // eslint-disable-line react/prop-types
     const { text } = prepareData(row);
-    return exprResult[column.name] ? `${text}\n(${exprResult[column.name]})` : text;
+    const format = createNumberFormatter(ruleFormat);
+    return ruleResult[column.name] ? `${text}\n(${format(ruleResult[column.name])})` : text;
   }
 
   NumberColumn.prepareData = prepareData;

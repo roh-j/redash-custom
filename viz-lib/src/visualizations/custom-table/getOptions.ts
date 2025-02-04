@@ -60,6 +60,9 @@ function getDefaultColumnsOptions(columns: any) {
       enabled: false,
       backgroundColor: "",
       rule: "",
+      ruleFormat: "0,0",
+      opacityRangeMin: 0,
+      opacityRangeMax: 0,
     },
   }));
 }

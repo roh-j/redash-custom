@@ -90,7 +90,7 @@ export function prepareColumns(
       return { borderBottom: "2px solid #767676" };
     };
 
-    const getRuleExpr = (row: any) => {
+    const getRuleResult = (row: any) => {
       const rule = column.conditionalFormatting.rule;
       let result = { variables: [], value: 0 };
 
@@ -125,7 +125,20 @@ export function prepareColumns(
       }
 
       const { red, green, blue } = hexRgb(column.conditionalFormatting.backgroundColor);
-      return { background: `rgba(${red}, ${green}, ${blue}, ${getRuleExpr(row).value})` };
+      let opacity = 0;
+
+      const ruleResult = getRuleResult(row).value;
+      const opacityRangeMin = column.conditionalFormatting.opacityRangeMin;
+      const opacityRangeMax = column.conditionalFormatting.opacityRangeMax;
+
+      if (ruleResult >= opacityRangeMax) {
+        opacity = 1;
+      }
+      if (ruleResult > opacityRangeMin && ruleResult < opacityRangeMax) {
+        opacity = (ruleResult - opacityRangeMin) / (opacityRangeMax - opacityRangeMin);
+      }
+
+      return { background: `rgba(${red}, ${green}, ${blue}, ${opacity})` };
     };
 
     const result = {
@@ -178,18 +191,20 @@ export function prepareColumns(
     const Component = initColumn(column);
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ key: a... Remove this comment to see the full error message
     result.render = (unused: any, row: any) => {
-      let exprResult: any = {};
+      let ruleResult: any = {};
 
       if (isValidConditionalFormatting()) {
-        const { value } = getRuleExpr(row);
+        const { value } = getRuleResult(row);
 
         if (value) {
-          exprResult[column.name] = value;
+          ruleResult[column.name] = value;
         }
       }
 
       return {
-        children: <Component row={row.record} exprResult={exprResult} />,
+        children: (
+          <Component row={row.record} ruleFormat={column.conditionalFormatting.ruleFormat} ruleResult={ruleResult} />
+        ),
         props: { className: `display-as-${column.displayAs}`, style: getConditionalFormattingStyle(row) },
       };
     };
