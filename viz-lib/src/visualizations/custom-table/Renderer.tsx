@@ -81,7 +81,8 @@ SearchInput.defaultProps = {
 };
 
 export default function Renderer({ data, options, selected, setSelected }: any) {
-  const [visibleConditionalFormatting, setVisibleConditionalFormatting] = useState(false);
+  const [conditionalFormattingEnabled, setConditionalFormattingEnabled] = useState(false);
+  const [multiSelectEnabled, setMultiSelectEnabled] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [orderBy, setOrderBy] = useState([]);
 
@@ -94,9 +95,19 @@ export default function Renderer({ data, options, selected, setSelected }: any) 
         <SearchInput searchColumns={searchColumns} onChange={(event: any) => setSearchTerm(event.target.value)} />
       ) : null;
     return prepareColumns(
-      visibleConditionalFormatting,
-      (newVisibleConditionalFormatting: any) => {
-        setVisibleConditionalFormatting(newVisibleConditionalFormatting);
+      conditionalFormattingEnabled,
+      (newConditionalFormattingEnabled: any) => {
+        setConditionalFormattingEnabled(newConditionalFormattingEnabled);
+      },
+      options.selection.multiSelectEnabled,
+      multiSelectEnabled,
+      (newMultiSelecEnabled: any) => {
+        if (options.selectableColumns.find((item: any) => item === options.selection.defaultSelection)) {
+          setSelected([options.selection.defaultSelection]);
+        } else {
+          setSelected([]);
+        }
+        setMultiSelectEnabled(newMultiSelecEnabled);
       },
       options.columns,
       options.selectableColumns,
@@ -114,19 +125,25 @@ export default function Renderer({ data, options, selected, setSelected }: any) 
           return;
         }
 
-        const newSelected = [...selected];
+        let newSelected = [...selected];
         const findedIndex = newSelected.findIndex((item: any) => item === columnName);
 
         if (findedIndex !== -1) {
           newSelected.splice(findedIndex, 1);
-        } else {
-          newSelected.push(columnName);
-        }
 
+          if (
+            !newSelected.length &&
+            options.selectableColumns.find((item: any) => item === options.selection.defaultSelection)
+          ) {
+            newSelected = [options.selection.defaultSelection];
+          }
+        } else {
+          newSelected = multiSelectEnabled ? [...newSelected, columnName] : [columnName];
+        }
         setSelected(newSelected);
       }
     );
-  }, [visibleConditionalFormatting, options.columns, searchColumns, orderBy]);
+  }, [conditionalFormattingEnabled, multiSelectEnabled, options.columns, searchColumns, orderBy]);
 
   const preparedRows = useMemo(() => sortRows(filterRows(initRows(data.rows), searchTerm, searchColumns), orderBy), [
     data.rows,
@@ -134,6 +151,20 @@ export default function Renderer({ data, options, selected, setSelected }: any) 
     searchColumns,
     orderBy,
   ]);
+
+  useEffect(() => {
+    if (options.defaultConditionalFormattingEnabled) {
+      setConditionalFormattingEnabled(true);
+    } else {
+      setConditionalFormattingEnabled(false);
+    }
+  }, [options.defaultConditionalFormattingEnabled]);
+
+  useEffect(() => {
+    if (!options.selection.multiSelectEnabled) {
+      setMultiSelectEnabled(false);
+    }
+  }, [options.selection.multiSelectEnabled]);
 
   // If data or config columns change - reset sorting
   useEffect(() => {

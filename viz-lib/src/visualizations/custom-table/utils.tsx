@@ -54,8 +54,11 @@ function getOrderByInfo(orderBy: any) {
 }
 
 export function prepareColumns(
-  visibleConditionalFormatting: any,
-  onVisibleConditionalFormattingChange: any,
+  conditionalFormattingEnabled: any,
+  onConditionalFormattingEnabledChange: any,
+  multiSelectOptionEnabled: any,
+  multiSelectEnabled: any,
+  onMultiSelectEnabledChange: any,
   columns: any,
   selectableColumns: any,
   selected: any,
@@ -116,7 +119,7 @@ export function prepareColumns(
       const enabled = column.conditionalFormatting.enabled;
       const backgroundColor = column.conditionalFormatting.backgroundColor;
 
-      return enabled && backgroundColor && visibleConditionalFormatting;
+      return enabled && backgroundColor && conditionalFormattingEnabled;
     };
 
     const getConditionalFormattingStyle = (row: any) => {
@@ -241,13 +244,24 @@ export function prepareColumns(
     {
       key: "custom-table-option",
       title: (
-        <Checkbox
-          checked={visibleConditionalFormatting}
-          onChange={e => {
-            onVisibleConditionalFormattingChange(e.target.checked);
-          }}>
-          Conditional formatting
-        </Checkbox>
+        <React.Fragment>
+          <Checkbox
+            checked={conditionalFormattingEnabled}
+            onChange={e => {
+              onConditionalFormattingEnabledChange(e.target.checked);
+            }}>
+            Conditional formatting
+          </Checkbox>
+          {multiSelectOptionEnabled && (
+            <Checkbox
+              checked={multiSelectEnabled}
+              onChange={e => {
+                onMultiSelectEnabledChange(e.target.checked);
+              }}>
+              Multi-Select
+            </Checkbox>
+          )}
+        </React.Fragment>
       ),
       // @ts-expect-error ts-migrate(2741) FIXME: Property 'onClick' is missing in type '{ className... Remove this comment to see the full error message
       onHeaderCell: () => ({ className: "custom-table-visualization-option" }),

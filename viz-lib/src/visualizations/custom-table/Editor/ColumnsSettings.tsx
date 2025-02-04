@@ -45,7 +45,6 @@ export default function ColumnsSettings({ options, onOptionsChange }: any) {
     } else {
       options.selectableColumns.push(columnName);
     }
-
     onOptionsChange({ selectableColumns: options.selectableColumns });
   }
 

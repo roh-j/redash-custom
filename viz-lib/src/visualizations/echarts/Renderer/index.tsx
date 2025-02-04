@@ -29,13 +29,16 @@ export default function Renderer({ data, options }: any) {
       return;
     }
 
+    resizeHandler();
     setEcharts(echartsRef.current.echarts);
     setEchartsInstance(echartsRef.current.getEchartsInstance());
-  }, []);
-
-  useEffect(() => {
-    resizeHandler();
     window.addEventListener("resize", resizeHandler);
+
+    if (options.selectableColumns.find((item: any) => item === options.selection.defaultSelection)) {
+      setSelected([options.selection.defaultSelection]);
+    } else {
+      setSelected([]);
+    }
 
     return () => {
       window.addEventListener("resize", resizeHandler);
