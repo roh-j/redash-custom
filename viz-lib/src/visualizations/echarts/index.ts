@@ -7,10 +7,9 @@ const DEFAULT_OPTIONS = {
   table: {
     enabled: false,
   },
-  defaultConditionalFormattingEnabled: false,
   selectableColumns: [],
   selection: {
-    multiSelectEnabled: false,
+    multiSelectOptionEnabled: false,
     defaultSelection: "",
   },
   height: "",

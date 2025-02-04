@@ -1,8 +1,9 @@
 import React from "react";
 import { filter, flatten, isString, map, merge, sortBy, uniq } from "lodash";
 import { Input, Section, Select, Switch } from "@/components/visualizations/editor";
+import { EditorPropTypes } from "@/visualizations/prop-types";
 
-export default function OptionsSettings({ options, onOptionsChange }: any) {
+export default function StyleSettings({ options, onOptionsChange }: any) {
   const updateOptions = (updates: any) => {
     onOptionsChange(merge({}, options, updates));
   };
@@ -31,21 +32,9 @@ export default function OptionsSettings({ options, onOptionsChange }: any) {
         {/* @ts-expect-error ts-migrate(2745) FIXME: This JSX tag's 'children' prop expects type 'never... Remove this comment to see the full error message */}
         <Switch
           // @ts-expect-error ts-migrate(2322) FIXME: Type 'any' is not assignable to type 'never'.
-          checked={options.defaultConditionalFormattingEnabled}
+          checked={options.selection.multiSelectOptionEnabled}
           // @ts-expect-error ts-migrate(2322) FIXME: Type '(enabled: any) => any' is not assignable to ... Remove this comment to see the full error message
-          onChange={(enabled: any) => updateOptions({ defaultConditionalFormattingEnabled: enabled })}>
-          Enable Default Conditional Formatting
-        </Switch>
-      </Section>
-
-      {/* @ts-expect-error ts-migrate(2745) FIXME: This JSX tag's 'children' prop expects type 'never... Remove this comment to see the full error message */}
-      <Section>
-        {/* @ts-expect-error ts-migrate(2745) FIXME: This JSX tag's 'children' prop expects type 'never... Remove this comment to see the full error message */}
-        <Switch
-          // @ts-expect-error ts-migrate(2322) FIXME: Type 'any' is not assignable to type 'never'.
-          checked={options.selection.multiSelectEnabled}
-          // @ts-expect-error ts-migrate(2322) FIXME: Type '(enabled: any) => any' is not assignable to ... Remove this comment to see the full error message
-          onChange={(enabled: any) => updateOptions({ selection: { multiSelectEnabled: enabled } })}>
+          onChange={(enabled: any) => updateOptions({ selection: { multiSelectOptionEnabled: enabled } })}>
           Enable Multi-Select
         </Switch>
       </Section>
@@ -73,7 +62,7 @@ export default function OptionsSettings({ options, onOptionsChange }: any) {
       {/* @ts-expect-error ts-migrate(2745) FIXME: This JSX tag's 'children' prop expects type 'never... Remove this comment to see the full error message */}
       <Section>
         <Input
-          label="Height"
+          label="ECharts Height"
           defaultValue={options.height}
           onChange={(event: any) => updateOptions({ height: event.target.value })}
         />
@@ -81,3 +70,5 @@ export default function OptionsSettings({ options, onOptionsChange }: any) {
     </React.Fragment>
   );
 }
+
+StyleSettings.propTypes = EditorPropTypes;

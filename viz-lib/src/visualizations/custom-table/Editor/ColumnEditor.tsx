@@ -87,7 +87,7 @@ export default function ColumnEditor({ column, onChange }: Props) {
           data-test={`CustomTable.Column.${column.name}.ConditionalFormatting`}
           checked={column.conditionalFormatting?.enabled}
           onChange={event => handleChange({ conditionalFormatting: { enabled: event.target.checked } })}>
-          Conditional formatting
+          Conditional Formatting
         </Checkbox>
       </Section>
 

@@ -95,11 +95,12 @@ export default function Renderer({ data, options, selected, setSelected }: any) 
         <SearchInput searchColumns={searchColumns} onChange={(event: any) => setSearchTerm(event.target.value)} />
       ) : null;
     return prepareColumns(
+      options.conditionalFormattingOptionName,
       conditionalFormattingEnabled,
       (newConditionalFormattingEnabled: any) => {
         setConditionalFormattingEnabled(newConditionalFormattingEnabled);
       },
-      options.selection.multiSelectEnabled,
+      options.selection?.multiSelectOptionEnabled,
       multiSelectEnabled,
       (newMultiSelecEnabled: any) => {
         if (options.selectableColumns.find((item: any) => item === options.selection.defaultSelection)) {
@@ -153,18 +154,18 @@ export default function Renderer({ data, options, selected, setSelected }: any) 
   ]);
 
   useEffect(() => {
-    if (options.defaultConditionalFormattingEnabled) {
+    if (options.conditionalFormattingByDefaultEnabled) {
       setConditionalFormattingEnabled(true);
     } else {
       setConditionalFormattingEnabled(false);
     }
-  }, [options.defaultConditionalFormattingEnabled]);
+  }, [options.conditionalFormattingByDefaultEnabled]);
 
   useEffect(() => {
-    if (!options.selection.multiSelectEnabled) {
+    if (!options.selection?.multiSelectOptionEnabled) {
       setMultiSelectEnabled(false);
     }
-  }, [options.selection.multiSelectEnabled]);
+  }, [options.selection?.multiSelectOptionEnabled]);
 
   // If data or config columns change - reset sorting
   useEffect(() => {

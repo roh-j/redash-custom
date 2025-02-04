@@ -54,6 +54,7 @@ function getOrderByInfo(orderBy: any) {
 }
 
 export function prepareColumns(
+  conditionalFormattingOptionName: any,
   conditionalFormattingEnabled: any,
   onConditionalFormattingEnabledChange: any,
   multiSelectOptionEnabled: any,
@@ -250,7 +251,7 @@ export function prepareColumns(
             onChange={e => {
               onConditionalFormattingEnabledChange(e.target.checked);
             }}>
-            Conditional formatting
+            {conditionalFormattingOptionName || "Conditional Formatting"}
           </Checkbox>
           {multiSelectOptionEnabled && (
             <Checkbox
