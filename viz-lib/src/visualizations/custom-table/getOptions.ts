@@ -60,9 +60,9 @@ function getDefaultColumnsOptions(columns: any) {
     highlightLinks: false,
     conditionalFormatting: {
       enabled: false,
-      backgroundColor: "",
+      backgroundColor: "FFFFFF",
       rule: "",
-      ruleFormat: "0,0",
+      ruleFormat: "0.0",
       opacityRangeMin: 0,
       opacityRangeMax: 1,
     },
