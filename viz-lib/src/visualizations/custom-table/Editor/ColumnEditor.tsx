@@ -86,7 +86,9 @@ export default function ColumnEditor({ column, onChange }: Props) {
         <Checkbox
           data-test={`CustomTable.Column.${column.name}.ConditionalFormatting`}
           checked={column.conditionalFormatting?.enabled}
-          onChange={event => handleChange({ conditionalFormatting: { enabled: event.target.checked } })}>
+          onChange={event =>
+            handleChange({ conditionalFormatting: { ...column.conditionalFormatting, enabled: event.target.checked } })
+          }>
           Conditional Formatting
         </Checkbox>
       </Section>
@@ -105,7 +107,7 @@ export default function ColumnEditor({ column, onChange }: Props) {
               color={column.conditionalFormatting?.backgroundColor}
               onChange={(backgroundColor: any) =>
                 handleChange({
-                  conditionalFormatting: { backgroundColor: backgroundColor },
+                  conditionalFormatting: { ...column.conditionalFormatting, backgroundColor: backgroundColor },
                 })
               }
               addonAfter={
@@ -123,7 +125,7 @@ export default function ColumnEditor({ column, onChange }: Props) {
               defaultValue={column.conditionalFormatting.rule}
               onChange={(event: any) =>
                 handleChangeDebounced({
-                  conditionalFormatting: { rule: event.target.value },
+                  conditionalFormatting: { ...column.conditionalFormatting, rule: event.target.value },
                 })
               }
             />
@@ -142,7 +144,7 @@ export default function ColumnEditor({ column, onChange }: Props) {
               defaultValue={column.conditionalFormatting.ruleFormat}
               onChange={(event: any) =>
                 handleChangeDebounced({
-                  conditionalFormatting: { ruleFormat: event.target.value },
+                  conditionalFormatting: { ...column.conditionalFormatting, ruleFormat: event.target.value },
                 })
               }
             />
@@ -159,7 +161,7 @@ export default function ColumnEditor({ column, onChange }: Props) {
                   defaultValue={toNumber(column.conditionalFormatting.opacityRangeMin)}
                   onChange={(value: any) =>
                     handleChange({
-                      conditionalFormatting: { opacityRangeMin: toNumber(value) },
+                      conditionalFormatting: { ...column.conditionalFormatting, opacityRangeMin: toNumber(value) },
                     })
                   }
                 />
@@ -171,7 +173,7 @@ export default function ColumnEditor({ column, onChange }: Props) {
                   defaultValue={toNumber(column.conditionalFormatting.opacityRangeMax)}
                   onChange={(value: any) =>
                     handleChange({
-                      conditionalFormatting: { opacityRangeMax: toNumber(value) },
+                      conditionalFormatting: { ...column.conditionalFormatting, opacityRangeMax: toNumber(value) },
                     })
                   }
                 />

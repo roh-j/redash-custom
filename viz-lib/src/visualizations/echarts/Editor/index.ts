@@ -8,7 +8,13 @@ import OptionsSettings from "./OptionsSettings";
 
 export default createTabbedEditor([
   { key: "General", title: "General", component: GeneralSettings },
-  { key: "Options", title: "Options", component: OptionsSettings },
+  {
+    key: "Options",
+    title: "Options",
+    component: ({ data, options, onOptionsChange }: any) => {
+      return OptionsSettings({ options: getOptions(options, { columns: data.columns }), onOptionsChange });
+    },
+  },
   { key: "Table Options", title: "Table Options", component: TableOptionsSettings },
   {
     key: "Columns",

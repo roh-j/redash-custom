@@ -22,7 +22,7 @@ export default function OptionsSettings({ options, onOptionsChange }: any) {
           // @ts-expect-error ts-migrate(2322) FIXME: Type 'any' is not assignable to type 'never'.
           checked={options.table.enabled}
           // @ts-expect-error ts-migrate(2322) FIXME: Type '(enabled: any) => any' is not assignable to ... Remove this comment to see the full error message
-          onChange={(enabled: any) => updateOptions({ table: { enabled: enabled } })}>
+          onChange={(enabled: any) => updateOptions({ table: { ...options.table, enabled: enabled } })}>
           Show Table
         </Switch>
       </Section>
@@ -34,7 +34,9 @@ export default function OptionsSettings({ options, onOptionsChange }: any) {
           // @ts-expect-error ts-migrate(2322) FIXME: Type 'any' is not assignable to type 'never'.
           checked={options.selection.multiSelectOptionEnabled}
           // @ts-expect-error ts-migrate(2322) FIXME: Type '(enabled: any) => any' is not assignable to ... Remove this comment to see the full error message
-          onChange={(enabled: any) => updateOptions({ selection: { multiSelectOptionEnabled: enabled } })}>
+          onChange={(enabled: any) =>
+            updateOptions({ selection: { ...options.selection, multiSelectOptionEnabled: enabled } })
+          }>
           Enable Multi-Select
         </Switch>
       </Section>
@@ -48,7 +50,9 @@ export default function OptionsSettings({ options, onOptionsChange }: any) {
           showSearch
           placeholder="Choose column..."
           value={options.selection.defaultSelection || undefined}
-          onChange={(column: any) => updateOptions({ selection: { defaultSelection: column || "" } })}>
+          onChange={(column: any) =>
+            updateOptions({ selection: { ...options.selection, defaultSelection: column || "" } })
+          }>
           {map(columns, c => (
             // @ts-expect-error ts-migrate(2339) FIXME: Property 'Option' does not exist on type '({ class... Remove this comment to see the full error message
             <Select.Option key={c} value={c}>
