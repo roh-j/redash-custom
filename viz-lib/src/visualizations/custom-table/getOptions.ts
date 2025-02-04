@@ -4,8 +4,8 @@ import { visualizationsSettings } from "@/visualizations/visualizationsSettings"
 const DEFAULT_OPTIONS = {
   itemsPerPage: 25,
   paginationSize: "default", // not editable through Editor
-  conditionalFormattingOptionName: "",
-  conditionalFormattingOptionByDefaultEnabled: false,
+  conditionalFormattingLabel: "",
+  conditionalFormattingChecked: false,
 };
 
 const filterTypes = ["filter", "multi-filter", "multiFilter"];

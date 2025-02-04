@@ -95,7 +95,7 @@ export default function Renderer({ data, options, selected, setSelected }: any) 
         <SearchInput searchColumns={searchColumns} onChange={(event: any) => setSearchTerm(event.target.value)} />
       ) : null;
     return prepareColumns(
-      options.conditionalFormattingOptionName,
+      options.conditionalFormattingLabel,
       conditionalFormattingEnabled,
       (newConditionalFormattingEnabled: any) => {
         setConditionalFormattingEnabled(newConditionalFormattingEnabled);
@@ -154,12 +154,12 @@ export default function Renderer({ data, options, selected, setSelected }: any) 
   ]);
 
   useEffect(() => {
-    if (options.conditionalFormattingOptionByDefaultEnabled) {
+    if (options.conditionalFormattingChecked) {
       setConditionalFormattingEnabled(true);
     } else {
       setConditionalFormattingEnabled(false);
     }
-  }, [options.conditionalFormattingOptionByDefaultEnabled]);
+  }, [options.conditionalFormattingChecked]);
 
   useEffect(() => {
     if (!options.selection?.multiSelectOptionEnabled) {

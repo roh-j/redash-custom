@@ -54,7 +54,7 @@ function getOrderByInfo(orderBy: any) {
 }
 
 export function prepareColumns(
-  conditionalFormattingOptionName: any,
+  conditionalFormattingLabel: any,
   conditionalFormattingEnabled: any,
   onConditionalFormattingEnabledChange: any,
   multiSelectOptionEnabled: any,
@@ -251,7 +251,7 @@ export function prepareColumns(
             onChange={e => {
               onConditionalFormattingEnabledChange(e.target.checked);
             }}>
-            {conditionalFormattingOptionName || "Conditional Formatting"}
+            {conditionalFormattingLabel || "Conditional Formatting"}
           </Checkbox>
           {multiSelectOptionEnabled && (
             <Checkbox
@@ -259,7 +259,7 @@ export function prepareColumns(
               onChange={e => {
                 onMultiSelectEnabledChange(e.target.checked);
               }}>
-              Multi-Select
+              Multi Select
             </Checkbox>
           )}
         </React.Fragment>
