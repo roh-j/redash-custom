@@ -181,12 +181,10 @@ export function prepareColumns(
       let exprResult: any = {};
 
       if (isValidConditionalFormatting()) {
-        const { variables, value } = getRuleExpr(row);
+        const { value } = getRuleExpr(row);
 
         if (value) {
-          variables.forEach(item => {
-            exprResult[item] = value;
-          });
+          exprResult[column.name] = value;
         }
       }
 

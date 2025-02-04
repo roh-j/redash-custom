@@ -106,7 +106,7 @@ export default function Renderer({ data, options }: any) {
         }}
         style={{
           height: options.height || "300px",
-          ...(!Object.keys(handleGetOptions()).length && { background: "#fafafa" }),
+          ...(!Object.keys(handleGetOptions()).length && { background: "#edecec" }),
         }}
       />
       {options.table.enabled && (
