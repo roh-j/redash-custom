@@ -3,7 +3,7 @@ import { filter, flatten, isString, map, merge, sortBy, uniq } from "lodash";
 import { Input, Section, Select, Switch } from "@/components/visualizations/editor";
 import { EditorPropTypes } from "@/visualizations/prop-types";
 
-export default function StyleSettings({ options, onOptionsChange }: any) {
+export default function OptionsSettings({ options, onOptionsChange }: any) {
   const updateOptions = (updates: any) => {
     onOptionsChange(merge({}, options, updates));
   };
@@ -71,4 +71,4 @@ export default function StyleSettings({ options, onOptionsChange }: any) {
   );
 }
 
-StyleSettings.propTypes = EditorPropTypes;
+OptionsSettings.propTypes = EditorPropTypes;

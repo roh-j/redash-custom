@@ -154,12 +154,12 @@ export default function Renderer({ data, options, selected, setSelected }: any) 
   ]);
 
   useEffect(() => {
-    if (options.conditionalFormattingByDefaultEnabled) {
+    if (options.conditionalFormattingOptionByDefaultEnabled) {
       setConditionalFormattingEnabled(true);
     } else {
       setConditionalFormattingEnabled(false);
     }
-  }, [options.conditionalFormattingByDefaultEnabled]);
+  }, [options.conditionalFormattingOptionByDefaultEnabled]);
 
   useEffect(() => {
     if (!options.selection?.multiSelectOptionEnabled) {

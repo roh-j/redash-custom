@@ -4,8 +4,8 @@ import { visualizationsSettings } from "@/visualizations/visualizationsSettings"
 const DEFAULT_OPTIONS = {
   itemsPerPage: 25,
   paginationSize: "default", // not editable through Editor
-  conditionalFormattingByDefaultEnabled: false,
   conditionalFormattingOptionName: "",
+  conditionalFormattingOptionByDefaultEnabled: false,
 };
 
 const filterTypes = ["filter", "multi-filter", "multiFilter"];
@@ -64,7 +64,7 @@ function getDefaultColumnsOptions(columns: any) {
       rule: "",
       ruleFormat: "0,0",
       opacityRangeMin: 0,
-      opacityRangeMax: 0,
+      opacityRangeMax: 1,
     },
   }));
 }
