@@ -24,7 +24,6 @@ function Editor({ column, onChange }: Props) {
       <Section>
         <Input
           label="URL template"
-          data-test="CustomTable.ColumnEditor.Image.UrlTemplate"
           defaultValue={column.imageUrlTemplate}
           onChange={(event: any) => onChangeDebounced({ imageUrlTemplate: event.target.value })}
         />
@@ -47,14 +46,12 @@ function Editor({ column, onChange }: Props) {
           {/* @ts-expect-error ts-migrate(2322) FIXME: Type 'Element' is not assignable to type 'null | u... Remove this comment to see the full error message */}
           <div className="image-dimension-selector">
             <Input
-              data-test="CustomTable.ColumnEditor.Image.Width"
               placeholder="Width"
               defaultValue={column.imageWidth}
               onChange={(event: any) => onChangeDebounced({ imageWidth: event.target.value })}
             />
             <span className="image-dimension-selector-spacer">&times;</span>
             <Input
-              data-test="CustomTable.ColumnEditor.Image.Height"
               placeholder="Height"
               defaultValue={column.imageHeight}
               onChange={(event: any) => onChangeDebounced({ imageHeight: event.target.value })}
@@ -67,7 +64,6 @@ function Editor({ column, onChange }: Props) {
       <Section>
         <Input
           label="Title template"
-          data-test="CustomTable.ColumnEditor.Image.TitleTemplate"
           defaultValue={column.imageTitleTemplate}
           onChange={(event: any) => onChangeDebounced({ imageTitleTemplate: event.target.value })}
         />

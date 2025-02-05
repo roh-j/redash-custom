@@ -61,9 +61,9 @@ export default function OptionsSettings({ options, onOptionsChange }: any) {
       {/* @ts-expect-error ts-migrate(2745) FIXME: This JSX tag's 'children' prop expects type 'never... Remove this comment to see the full error message */}
       <Section>
         <Checkbox
-          defaultChecked={options.selection.multiSelectOptionEnabled}
+          defaultChecked={options.selection.multiSelectEnabled}
           onChange={event =>
-            updateOptions({ selection: { ...options.selection, multiSelectOptionEnabled: event.target.checked } })
+            updateOptions({ selection: { ...options.selection, multiSelectEnabled: event.target.checked } })
           }>
           Enable Multi Select
         </Checkbox>

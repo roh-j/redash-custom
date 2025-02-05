@@ -24,7 +24,6 @@ function Editor({ column, onChange }: Props) {
             <ContextHelp.NumberFormatSpecs />
           </React.Fragment>
         }
-        data-test="CustomTable.ColumnEditor.Number.Format"
         defaultValue={column.numberFormat}
         onChange={(event: any) => onChangeDebounced({ numberFormat: event.target.value })}
       />
@@ -41,10 +40,10 @@ export default function initNumberColumn(column: any) {
     };
   }
 
-  function NumberColumn({ row, ruleFormat, ruleResult }: any) {
+  function NumberColumn({ row, ruleResultFormat, ruleResult }: any) {
     // eslint-disable-line react/prop-types
     const { text } = prepareData(row);
-    const format = createNumberFormatter(ruleFormat);
+    const format = createNumberFormatter(ruleResultFormat);
     return ruleResult[column.name] ? `${text}\n(${format(ruleResult[column.name])})` : text;
   }
 

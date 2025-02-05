@@ -25,9 +25,10 @@ type OwnProps = {
     displayAs?: any; // TODO: PropTypes.oneOf(keys(ColumnTypes))
     conditionalFormatting?: {
       enabled: boolean;
+      showRuleResult: boolean;
       backgroundColor: string;
       rule: string;
-      ruleFormat: string;
+      ruleResultFormat: string;
       opacityRangeMin: string;
       opacityRangeMax: string;
     };
@@ -55,14 +56,12 @@ export default function ColumnEditor({ column, onChange }: Props) {
         <Grid.Row gutter={15} type="flex" align="middle">
           <Grid.Col span={16}>
             <Input
-              data-test={`CustomTable.Column.${column.name}.Title`}
               defaultValue={column.title}
               onChange={(event: any) => handleChangeDebounced({ title: event.target.value })}
             />
           </Grid.Col>
           <Grid.Col span={8}>
             <TextAlignmentSelect
-              data-test={`CustomTable.Column.${column.name}.TextAlignment`}
               defaultValue={column.alignContent}
               onChange={(event: any) => handleChange({ alignContent: event.target.value })}
             />
@@ -73,7 +72,6 @@ export default function ColumnEditor({ column, onChange }: Props) {
       {/* @ts-expect-error ts-migrate(2745) FIXME: This JSX tag's 'children' prop expects type 'never... Remove this comment to see the full error message */}
       <Section>
         <Checkbox
-          data-test={`CustomTable.Column.${column.name}.UseForSearch`}
           // @ts-expect-error ts-migrate(2339) FIXME: Property 'allowSearch' does not exist on type '{ n... Remove this comment to see the full error message
           defaultChecked={column.allowSearch}
           onChange={event => handleChange({ allowSearch: event.target.checked })}>
@@ -84,7 +82,6 @@ export default function ColumnEditor({ column, onChange }: Props) {
       {/* @ts-expect-error ts-migrate(2745) FIXME: This JSX tag's 'children' prop expects type 'never... Remove this comment to see the full error message */}
       <Section>
         <Checkbox
-          data-test={`CustomTable.Column.${column.name}.ConditionalFormatting`}
           checked={column.conditionalFormatting?.enabled}
           onChange={event =>
             handleChange({ conditionalFormatting: { ...column.conditionalFormatting, enabled: event.target.checked } })
@@ -97,14 +94,26 @@ export default function ColumnEditor({ column, onChange }: Props) {
         <React.Fragment>
           {/* @ts-expect-error ts-migrate(2745) FIXME: This JSX tag's 'children' prop expects type 'never... Remove this comment to see the full error message */}
           <Section>
+            <Checkbox
+              defaultChecked={column.conditionalFormatting.showRuleResult}
+              onChange={(event: any) =>
+                handleChangeDebounced({
+                  conditionalFormatting: { ...column.conditionalFormatting, showRuleResult: event.target.checked },
+                })
+              }>
+              Show Rule Result
+            </Checkbox>
+          </Section>
+
+          {/* @ts-expect-error ts-migrate(2745) FIXME: This JSX tag's 'children' prop expects type 'never... Remove this comment to see the full error message */}
+          <Section>
             <ColorPicker
               layout="horizontal"
               label="Background Color"
-              data-test={`CustomTable.Column.${column.name}.ConditionalFormatting.BackgroundColor`}
               interactive
               placement="topLeft"
               presetColors={ColorPalette}
-              color={column.conditionalFormatting?.backgroundColor}
+              color={column.conditionalFormatting.backgroundColor}
               onChange={(backgroundColor: any) =>
                 handleChange({
                   conditionalFormatting: { ...column.conditionalFormatting, backgroundColor: backgroundColor },
@@ -112,7 +121,7 @@ export default function ColumnEditor({ column, onChange }: Props) {
               }
               addonAfter={
                 // @ts-expect-error ts-migrate(2339) FIXME: Property 'Label' does not exist on type '({ classN... Remove this comment to see the full error message
-                <ColorPicker.Label color={column.conditionalFormatting?.backgroundColor} presetColors={ColorPalette} />
+                <ColorPicker.Label color={column.conditionalFormatting.backgroundColor} presetColors={ColorPalette} />
               }
             />
           </Section>
@@ -136,15 +145,14 @@ export default function ColumnEditor({ column, onChange }: Props) {
             <Input
               label={
                 <React.Fragment>
-                  Rule format
+                  Rule Result Format
                   <ContextHelp.NumberFormatSpecs />
                 </React.Fragment>
               }
-              data-test={`CustomTable.Column.${column.name}.ConditionalFormatting.RuleFormat`}
-              defaultValue={column.conditionalFormatting.ruleFormat}
+              defaultValue={column.conditionalFormatting.ruleResultFormat}
               onChange={(event: any) =>
                 handleChangeDebounced({
-                  conditionalFormatting: { ...column.conditionalFormatting, ruleFormat: event.target.value },
+                  conditionalFormatting: { ...column.conditionalFormatting, ruleResultFormat: event.target.value },
                 })
               }
             />
@@ -157,7 +165,6 @@ export default function ColumnEditor({ column, onChange }: Props) {
               <Grid.Col span={12}>
                 <InputNumber
                   label="Opacity Min Value"
-                  data-test={`CustomTable.Column.${column.name}.ConditionalFormatting.OpacityRangeMin`}
                   defaultValue={toNumber(column.conditionalFormatting.opacityRangeMin)}
                   onChange={(value: any) =>
                     handleChange({
@@ -169,7 +176,6 @@ export default function ColumnEditor({ column, onChange }: Props) {
               <Grid.Col span={12}>
                 <InputNumber
                   label="Opacity Max Value"
-                  data-test={`CustomTable.Column.${column.name}.ConditionalFormatting.OpacityRangeMax`}
                   defaultValue={toNumber(column.conditionalFormatting.opacityRangeMax)}
                   onChange={(value: any) =>
                     handleChange({
@@ -197,12 +203,11 @@ export default function ColumnEditor({ column, onChange }: Props) {
       <Section>
         <Select
           label="Display as:"
-          data-test={`CustomTable.Column.${column.name}.DisplayAs`}
           defaultValue={column.displayAs}
           onChange={(displayAs: any) => handleChange({ displayAs })}>
           {map(ColumnTypes, ({ friendlyName }, key) => (
             // @ts-expect-error ts-migrate(2339) FIXME: Property 'Option' does not exist on type '({ class... Remove this comment to see the full error message
-            <Select.Option key={key} data-test={`CustomTable.Column.${column.name}.DisplayAs.${key}`}>
+            <Select.Option key={key}>
               {friendlyName}
               {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'Option' does not exist on type '({ class... Remove this comment to see the full error message */}
             </Select.Option>

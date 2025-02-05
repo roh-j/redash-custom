@@ -17,10 +17,7 @@ function Editor({ column, onChange }: Props) {
     <React.Fragment>
       {/* @ts-expect-error ts-migrate(2745) FIXME: This JSX tag's 'children' prop expects type 'never... Remove this comment to see the full error message */}
       <Section>
-        <Checkbox
-          data-test="CustomTable.ColumnEditor.Text.AllowHTML"
-          checked={column.allowHTML}
-          onChange={event => onChange({ allowHTML: event.target.checked })}>
+        <Checkbox checked={column.allowHTML} onChange={event => onChange({ allowHTML: event.target.checked })}>
           Allow HTML content
         </Checkbox>
       </Section>
@@ -29,7 +26,6 @@ function Editor({ column, onChange }: Props) {
         // @ts-expect-error ts-migrate(2745) FIXME: This JSX tag's 'children' prop expects type 'never... Remove this comment to see the full error message
         <Section>
           <Checkbox
-            data-test="CustomTable.ColumnEditor.Text.HighlightLinks"
             checked={column.highlightLinks}
             onChange={event => onChange({ highlightLinks: event.target.checked })}>
             Highlight links
@@ -49,10 +45,10 @@ export default function initTextColumn(column: any) {
     };
   }
 
-  function TextColumn({ row, ruleFormat, ruleResult }: any) {
+  function TextColumn({ row, ruleResultFormat, ruleResult }: any) {
     // eslint-disable-line react/prop-types
     const { text } = prepareData(row);
-    const format = createNumberFormatter(ruleFormat);
+    const format = createNumberFormatter(ruleResultFormat);
     const appendedText = ruleResult[column.name] ? `${text}\n(${format(ruleResult[column.name])})` : text;
     return column.allowHTML ? <HtmlContent>{appendedText}</HtmlContent> : appendedText;
   }

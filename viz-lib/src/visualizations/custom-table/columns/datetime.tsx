@@ -24,7 +24,6 @@ function Editor({ column, onChange }: Props) {
             <ContextHelp.DateTimeFormatSpecs />
           </React.Fragment>
         }
-        data-test="CustomTable.ColumnEditor.DateTime.Format"
         defaultValue={column.dateTimeFormat}
         onChange={(event: any) => onChangeDebounced({ dateTimeFormat: event.target.value })}
       />

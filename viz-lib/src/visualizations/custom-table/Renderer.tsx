@@ -81,8 +81,8 @@ SearchInput.defaultProps = {
 };
 
 export default function Renderer({ data, options, selected, setSelected }: any) {
-  const [conditionalFormattingEnabled, setConditionalFormattingEnabled] = useState(false);
-  const [multiSelectEnabled, setMultiSelectEnabled] = useState(false);
+  const [conditionalFormattingActive, setConditionalFormattingActive] = useState(false);
+  const [multiSelectActive, setMultiSelectActive] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [orderBy, setOrderBy] = useState([]);
 
@@ -96,19 +96,19 @@ export default function Renderer({ data, options, selected, setSelected }: any) 
       ) : null;
     return prepareColumns(
       options.conditionalFormattingLabel,
-      conditionalFormattingEnabled,
-      (newConditionalFormattingEnabled: any) => {
-        setConditionalFormattingEnabled(newConditionalFormattingEnabled);
+      conditionalFormattingActive,
+      (newConditionalFormattingActive: any) => {
+        setConditionalFormattingActive(newConditionalFormattingActive);
       },
-      options.selection?.multiSelectOptionEnabled,
-      multiSelectEnabled,
-      (newMultiSelecEnabled: any) => {
+      options.selection?.multiSelectEnabled,
+      multiSelectActive,
+      (newMultiSelectActive: any) => {
         if (options.selectableColumns.find((item: any) => item === options.selection.defaultSelection)) {
           setSelected([options.selection.defaultSelection]);
         } else {
           setSelected([]);
         }
-        setMultiSelectEnabled(newMultiSelecEnabled);
+        setMultiSelectActive(newMultiSelectActive);
       },
       options.columns,
       options.selectableColumns,
@@ -139,12 +139,12 @@ export default function Renderer({ data, options, selected, setSelected }: any) 
             newSelected = [options.selection.defaultSelection];
           }
         } else {
-          newSelected = multiSelectEnabled ? [...newSelected, columnName] : [columnName];
+          newSelected = multiSelectActive ? [...newSelected, columnName] : [columnName];
         }
         setSelected(newSelected);
       }
     );
-  }, [conditionalFormattingEnabled, multiSelectEnabled, options.columns, searchColumns, orderBy]);
+  }, [conditionalFormattingActive, multiSelectActive, options.columns, searchColumns, orderBy]);
 
   const preparedRows = useMemo(() => sortRows(filterRows(initRows(data.rows), searchTerm, searchColumns), orderBy), [
     data.rows,
@@ -155,17 +155,17 @@ export default function Renderer({ data, options, selected, setSelected }: any) 
 
   useEffect(() => {
     if (options.conditionalFormattingChecked) {
-      setConditionalFormattingEnabled(true);
+      setConditionalFormattingActive(true);
     } else {
-      setConditionalFormattingEnabled(false);
+      setConditionalFormattingActive(false);
     }
   }, [options.conditionalFormattingChecked]);
 
   useEffect(() => {
-    if (!options.selection?.multiSelectOptionEnabled) {
-      setMultiSelectEnabled(false);
+    if (!options.selection?.multiSelectEnabled) {
+      setMultiSelectActive(false);
     }
-  }, [options.selection?.multiSelectOptionEnabled]);
+  }, [options.selection?.multiSelectEnabled]);
 
   // If data or config columns change - reset sorting
   useEffect(() => {
@@ -181,7 +181,6 @@ export default function Renderer({ data, options, selected, setSelected }: any) 
       <Table
         className="custom-table-fixed-header"
         data-percy="show-scrollbars"
-        data-test="CustomTableVisualization"
         // @ts-expect-error ts-migrate(2322) FIXME: Type '{ key: any; dataIndex: string; align: any; s... Remove this comment to see the full error message
         columns={tableColumns}
         dataSource={preparedRows}

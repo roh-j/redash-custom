@@ -30,7 +30,6 @@ function Editor({ column, onChange }: Props) {
               Value for <code>false</code>
             </React.Fragment>
           }
-          data-test="CustomTable.ColumnEditor.Boolean.False"
           // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
           defaultValue={column.booleanValues[0]}
           onChange={(event: any) => handleChangeDebounced(0, event.target.value)}
@@ -45,7 +44,6 @@ function Editor({ column, onChange }: Props) {
               Value for <code>true</code>
             </React.Fragment>
           }
-          data-test="CustomTable.ColumnEditor.Boolean.True"
           // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
           defaultValue={column.booleanValues[1]}
           onChange={(event: any) => handleChangeDebounced(1, event.target.value)}

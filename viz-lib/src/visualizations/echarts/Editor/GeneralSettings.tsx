@@ -6,7 +6,7 @@ import Menu from "antd/lib/menu";
 import React, { useEffect, useRef } from "react";
 import Space from "antd/lib/space";
 import { DownOutlined } from "@ant-design/icons";
-import { merge } from "lodash";
+import { merge, trimStart } from "lodash";
 import { Section } from "@/components/visualizations/editor";
 import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/webpack-resolver";
@@ -15,6 +15,14 @@ type Columns = {
   label: string;
   value: string;
 };
+
+const defaultEchartsOptions = trimStart(`
+// Available variables are rows, echarts, echartsInstance, and selected
+// Type console.log(rows, echarts, echartsInstance, selected);
+// for more info about rows, echarts, echartsInstance and selected
+// To plot your graph call return { xAxis: { ... }, yAxis: { ... }, series: { ... }, ... }
+// ECharts examples and docs: https://echarts.apache.org/examples/en/index.html
+`);
 
 export default function GeneralSettings({ data, options, onOptionsChange }: any) {
   const editorRef = useRef<any>(null);
@@ -45,7 +53,7 @@ export default function GeneralSettings({ data, options, onOptionsChange }: any)
       return;
     }
 
-    editorRef.current.editor.session.setValue(options.echartsOptions);
+    editorRef.current.editor.session.setValue(!options.echartsOptions ? defaultEchartsOptions : options.echartsOptions);
   }, []);
 
   return (

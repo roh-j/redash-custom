@@ -9,7 +9,7 @@ const DEFAULT_OPTIONS = {
   },
   selectableColumns: [],
   selection: {
-    multiSelectOptionEnabled: false,
+    multiSelectEnabled: false,
     defaultSelection: "",
   },
   height: "",

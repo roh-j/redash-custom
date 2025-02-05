@@ -24,7 +24,6 @@ function Editor({ column, onChange }: Props) {
       <Section>
         <Input
           label="URL template"
-          data-test="CustomTable.ColumnEditor.Link.UrlTemplate"
           defaultValue={column.linkUrlTemplate}
           onChange={(event: any) => onChangeDebounced({ linkUrlTemplate: event.target.value })}
         />
@@ -34,7 +33,6 @@ function Editor({ column, onChange }: Props) {
       <Section>
         <Input
           label="Text template"
-          data-test="CustomTable.ColumnEditor.Link.TextTemplate"
           defaultValue={column.linkTextTemplate}
           onChange={(event: any) => onChangeDebounced({ linkTextTemplate: event.target.value })}
         />
@@ -44,7 +42,6 @@ function Editor({ column, onChange }: Props) {
       <Section>
         <Input
           label="Title template"
-          data-test="CustomTable.ColumnEditor.Link.TitleTemplate"
           defaultValue={column.linkTitleTemplate}
           onChange={(event: any) => onChangeDebounced({ linkTitleTemplate: event.target.value })}
         />
@@ -53,7 +50,6 @@ function Editor({ column, onChange }: Props) {
       {/* @ts-expect-error ts-migrate(2745) FIXME: This JSX tag's 'children' prop expects type 'never... Remove this comment to see the full error message */}
       <Section>
         <Checkbox
-          data-test="CustomTable.ColumnEditor.Link.OpenInNewTab"
           checked={column.linkOpenInNewTab}
           onChange={event => onChange({ linkOpenInNewTab: event.target.checked })}>
           Open in new tab

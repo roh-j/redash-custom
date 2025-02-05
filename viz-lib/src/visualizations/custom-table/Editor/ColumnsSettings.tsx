@@ -68,7 +68,7 @@ export default function ColumnsSettings({ options, onOptionsChange }: any) {
             header={
               <React.Fragment>
                 <DragHandle />
-                <span data-test={`CustomTable.Column.${column.name}.Name`}>
+                <span>
                   {column.name}
                   {column.title !== "" && column.title !== column.name && (
                     <Text type="secondary" style={{ marginLeft: 5 }}>
@@ -91,12 +91,10 @@ export default function ColumnsSettings({ options, onOptionsChange }: any) {
                 <Tooltip title="Toggle visibility" mouseEnterDelay={0} mouseLeaveDelay={0}>
                   {column.visible ? (
                     <EyeOutlinedIcon
-                      data-test={`CustomTable.Column.${column.name}.Visibility`}
                       onClick={event => handleColumnChange({ ...column, visible: !column.visible }, event)}
                     />
                   ) : (
                     <EyeInvisibleOutlinedIcon
-                      data-test={`CustomTable.Column.${column.name}.Visibility`}
                       onClick={event => handleColumnChange({ ...column, visible: !column.visible }, event)}
                     />
                   )}

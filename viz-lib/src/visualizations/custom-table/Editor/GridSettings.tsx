@@ -11,12 +11,11 @@ export default function GridSettings({ options, onOptionsChange }: any) {
     <Section>
       <Select
         label="Items per page"
-        data-test="CustomTable.ItemsPerPage"
         defaultValue={options.itemsPerPage}
         onChange={(itemsPerPage: any) => onOptionsChange({ itemsPerPage })}>
         {map(ALLOWED_ITEM_PER_PAGE, value => (
           // @ts-expect-error ts-migrate(2339) FIXME: Property 'Option' does not exist on type '({ class... Remove this comment to see the full error message
-          <Select.Option key={`ipp${value}`} value={value} data-test={`CustomTable.ItemsPerPage.${value}`}>
+          <Select.Option key={`ipp${value}`} value={value}>
             {value}
             {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'Option' does not exist on type '({ class... Remove this comment to see the full error message */}
           </Select.Option>

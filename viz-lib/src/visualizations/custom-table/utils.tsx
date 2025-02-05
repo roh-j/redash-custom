@@ -55,10 +55,10 @@ function getOrderByInfo(orderBy: any) {
 
 export function prepareColumns(
   conditionalFormattingLabel: any,
-  conditionalFormattingEnabled: any,
-  onConditionalFormattingEnabledChange: any,
-  multiSelectOptionEnabled: any,
+  conditionalFormattingActive: any,
+  onConditionalFormattingActiveChange: any,
   multiSelectEnabled: any,
+  multiSelectActive: any,
   onMultiSelectEnabledChange: any,
   columns: any,
   selectableColumns: any,
@@ -120,7 +120,7 @@ export function prepareColumns(
       const enabled = column.conditionalFormatting.enabled;
       const backgroundColor = column.conditionalFormatting.backgroundColor;
 
-      return enabled && backgroundColor && conditionalFormattingEnabled;
+      return enabled && backgroundColor && conditionalFormattingActive;
     };
 
     const getConditionalFormattingStyle = (row: any) => {
@@ -197,7 +197,7 @@ export function prepareColumns(
     result.render = (unused: any, row: any) => {
       let ruleResult: any = {};
 
-      if (isValidConditionalFormatting()) {
+      if (isValidConditionalFormatting() && column.conditionalFormatting.showRuleResult) {
         const { value } = getRuleResult(row);
 
         if (value) {
@@ -207,7 +207,11 @@ export function prepareColumns(
 
       return {
         children: (
-          <Component row={row.record} ruleFormat={column.conditionalFormatting.ruleFormat} ruleResult={ruleResult} />
+          <Component
+            row={row.record}
+            ruleResultFormat={column.conditionalFormatting.ruleResultFormat}
+            ruleResult={ruleResult}
+          />
         ),
         props: { className: `display-as-${column.displayAs}`, style: getConditionalFormattingStyle(row) },
       };
@@ -247,15 +251,15 @@ export function prepareColumns(
       title: (
         <React.Fragment>
           <Checkbox
-            checked={conditionalFormattingEnabled}
+            checked={conditionalFormattingActive}
             onChange={e => {
-              onConditionalFormattingEnabledChange(e.target.checked);
+              onConditionalFormattingActiveChange(e.target.checked);
             }}>
             {conditionalFormattingLabel || "Conditional Formatting"}
           </Checkbox>
-          {multiSelectOptionEnabled && (
+          {multiSelectEnabled && (
             <Checkbox
-              checked={multiSelectEnabled}
+              checked={multiSelectActive}
               onChange={e => {
                 onMultiSelectEnabledChange(e.target.checked);
               }}>
