@@ -1,7 +1,9 @@
-import { map, keys, toNumber } from "lodash";
-import React from "react";
-import { useDebouncedCallback } from "use-debounce";
 import * as Grid from "antd/lib/grid";
+import ColorPalette from "@/visualizations/ColorPalette";
+import ColumnTypes from "../columns";
+import React from "react";
+import { map, toNumber } from "lodash";
+import { useDebouncedCallback } from "use-debounce";
 import {
   Section,
   Select,
@@ -13,9 +15,6 @@ import {
   ContextHelp,
 } from "@/components/visualizations/editor";
 
-import ColumnTypes from "../columns";
-import ColorPalette from "@/visualizations/ColorPalette";
-
 type OwnProps = {
   column: {
     name: string;
@@ -25,7 +24,8 @@ type OwnProps = {
     displayAs?: any; // TODO: PropTypes.oneOf(keys(ColumnTypes))
     conditionalFormatting?: {
       enabled: boolean;
-      showRuleResult: boolean;
+      showColumnWithRuleResult: boolean;
+      replaceColumnWithRuleResult: boolean;
       backgroundColor: string;
       rule: string;
       ruleResultFormat: string;
@@ -73,7 +73,7 @@ export default function ColumnEditor({ column, onChange }: Props) {
       <Section>
         <Checkbox
           // @ts-expect-error ts-migrate(2339) FIXME: Property 'allowSearch' does not exist on type '{ n... Remove this comment to see the full error message
-          defaultChecked={column.allowSearch}
+          checked={column.allowSearch}
           onChange={event => handleChange({ allowSearch: event.target.checked })}>
           Use for search
         </Checkbox>
@@ -86,7 +86,7 @@ export default function ColumnEditor({ column, onChange }: Props) {
           onChange={event =>
             handleChange({ conditionalFormatting: { ...column.conditionalFormatting, enabled: event.target.checked } })
           }>
-          Conditional Formatting
+          Conditional formatting
         </Checkbox>
       </Section>
 
@@ -95,13 +95,34 @@ export default function ColumnEditor({ column, onChange }: Props) {
           {/* @ts-expect-error ts-migrate(2745) FIXME: This JSX tag's 'children' prop expects type 'never... Remove this comment to see the full error message */}
           <Section>
             <Checkbox
-              defaultChecked={column.conditionalFormatting.showRuleResult}
+              checked={column.conditionalFormatting.showColumnWithRuleResult}
               onChange={(event: any) =>
                 handleChangeDebounced({
-                  conditionalFormatting: { ...column.conditionalFormatting, showRuleResult: event.target.checked },
+                  conditionalFormatting: {
+                    ...column.conditionalFormatting,
+                    showColumnWithRuleResult: event.target.checked,
+                    ...(event.target.checked && { replaceColumnWithRuleResult: false }),
+                  },
                 })
               }>
-              Show Rule Result
+              Show column with rule result
+            </Checkbox>
+          </Section>
+
+          {/* @ts-expect-error ts-migrate(2745) FIXME: This JSX tag's 'children' prop expects type 'never... Remove this comment to see the full error message */}
+          <Section>
+            <Checkbox
+              checked={column.conditionalFormatting.replaceColumnWithRuleResult}
+              onChange={(event: any) =>
+                handleChangeDebounced({
+                  conditionalFormatting: {
+                    ...column.conditionalFormatting,
+                    replaceColumnWithRuleResult: event.target.checked,
+                    ...(event.target.checked && { showColumnWithRuleResult: false }),
+                  },
+                })
+              }>
+              Replace column with rule result
             </Checkbox>
           </Section>
 
@@ -145,7 +166,7 @@ export default function ColumnEditor({ column, onChange }: Props) {
             <Input
               label={
                 <React.Fragment>
-                  Rule Result Format
+                  Rule result format
                   <ContextHelp.NumberFormatSpecs />
                 </React.Fragment>
               }

@@ -1,7 +1,6 @@
-import createTabbedEditor from "@/components/visualizations/editor/createTabbedEditor";
-
 import AppearanceSettings from "./AppearanceSettings";
 import ColumnsSettings from "./ColumnsSettings";
+import createTabbedEditor from "@/components/visualizations/editor/createTabbedEditor";
 import GridSettings from "./GridSettings";
 
 import "./editor.less";

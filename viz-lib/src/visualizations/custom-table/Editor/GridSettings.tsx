@@ -1,7 +1,7 @@
-import { map } from "lodash";
 import React from "react";
-import { Section, Select } from "@/components/visualizations/editor";
 import { EditorPropTypes } from "@/visualizations/prop-types";
+import { map } from "lodash";
+import { Section, Select } from "@/components/visualizations/editor";
 
 const ALLOWED_ITEM_PER_PAGE = [5, 10, 15, 20, 25, 50, 100, 150, 200, 250, 500];
 

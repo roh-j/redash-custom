@@ -1,18 +1,16 @@
-import { map } from "lodash";
-import React from "react";
+import Checkbox from "antd/lib/checkbox";
 import Collapse from "antd/lib/collapse";
+import ColumnEditor from "./ColumnEditor";
+import EyeInvisibleOutlinedIcon from "@ant-design/icons/EyeInvisibleOutlined";
+import EyeOutlinedIcon from "@ant-design/icons/EyeOutlined";
+import React from "react";
 import Tooltip from "antd/lib/tooltip";
 import Typography from "antd/lib/typography";
+import { DragHandle, SortableContainer } from "@/components/sortable";
+import { EditorPropTypes } from "@/visualizations/prop-types";
+import { map } from "lodash";
 // @ts-expect-error ts-migrate(2724) FIXME: Module '"../../../../node_modules/react-sortable-h... Remove this comment to see the full error message
 import { sortableElement } from "react-sortable-hoc";
-import { SortableContainer, DragHandle } from "@/components/sortable";
-import { EditorPropTypes } from "@/visualizations/prop-types";
-
-import EyeOutlinedIcon from "@ant-design/icons/EyeOutlined";
-import EyeInvisibleOutlinedIcon from "@ant-design/icons/EyeInvisibleOutlined";
-
-import ColumnEditor from "./ColumnEditor";
-import Checkbox from "antd/lib/checkbox";
 
 const { Text } = Typography;
 
@@ -103,7 +101,7 @@ export default function ColumnsSettings({ options, onOptionsChange }: any) {
                   <Tooltip title="Enable Selection">
                     <div className="m-l-10">
                       <Checkbox
-                        defaultChecked={
+                        checked={
                           options.selectableColumns &&
                           options.selectableColumns.find((item: any) => item === column.name)
                         }

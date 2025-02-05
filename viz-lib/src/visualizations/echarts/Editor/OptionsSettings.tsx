@@ -1,7 +1,7 @@
 import React from "react";
+import { EditorPropTypes } from "@/visualizations/prop-types";
 import { filter, flatten, isString, map, merge, sortBy, uniq } from "lodash";
 import { Input, Section, Select, Switch } from "@/components/visualizations/editor";
-import { EditorPropTypes } from "@/visualizations/prop-types";
 
 export default function OptionsSettings({ options, onOptionsChange }: any) {
   const updateOptions = (updates: any) => {

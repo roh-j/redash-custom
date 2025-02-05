@@ -1,12 +1,11 @@
-import { filter, map, get, initial, last, reduce } from "lodash";
-import React, { useMemo, useState, useEffect } from "react";
-import Table from "antd/lib/table";
-import Input from "antd/lib/input";
 import InfoCircleFilledIcon from "@ant-design/icons/InfoCircleFilled";
+import Input from "antd/lib/input";
 import Popover from "antd/lib/popover";
+import React, { useEffect, useMemo, useState } from "react";
+import Table from "antd/lib/table";
+import { filter, get, initial, last, map, reduce } from "lodash";
+import { filterRows, initRows, prepareColumns, sortRows } from "./utils";
 import { RendererPropTypes } from "@/visualizations/prop-types";
-
-import { prepareColumns, initRows, filterRows, sortRows } from "./utils";
 
 import "./renderer.less";
 

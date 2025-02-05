@@ -60,7 +60,8 @@ function getDefaultColumnsOptions(columns: any) {
     highlightLinks: false,
     conditionalFormatting: {
       enabled: false,
-      showRuleResult: true,
+      showColumnWithRuleResult: true,
+      replaceColumnWithRuleResult: false,
       backgroundColor: "FFFFFF",
       rule: "",
       ruleResultFormat: "0.00",

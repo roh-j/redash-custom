@@ -1,7 +1,7 @@
 import React from "react";
-import { useDebouncedCallback } from "use-debounce";
-import { Section, Input, ContextHelp } from "@/components/visualizations/editor";
+import { ContextHelp, Input, Section } from "@/components/visualizations/editor";
 import { createNumberFormatter } from "@/lib/value-format";
+import { useDebouncedCallback } from "use-debounce";
 
 type Props = {
   column: {
@@ -32,7 +32,9 @@ function Editor({ column, onChange }: Props) {
 }
 
 export default function initNumberColumn(column: any) {
-  const format = createNumberFormatter(column.numberFormat);
+  const format = createNumberFormatter(
+    column.conditionalFormatting.replaceColumnWithRuleResult ? "" : column.numberFormat
+  );
 
   function prepareData(row: any) {
     return {

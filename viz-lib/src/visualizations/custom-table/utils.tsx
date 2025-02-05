@@ -1,11 +1,12 @@
-import { isNil, map, get, filter, each, sortBy, some, findIndex, toString } from "lodash";
-import { Parser } from "expr-eval";
-import React from "react";
-import cx from "classnames";
-import Tooltip from "antd/lib/tooltip";
-import ColumnTypes from "./columns";
-import hexRgb from "hex-rgb";
 import Checkbox from "antd/lib/checkbox";
+import ColumnTypes from "./columns";
+import cx from "classnames";
+import hexRgb from "hex-rgb";
+import React from "react";
+import Tooltip from "antd/lib/tooltip";
+import { createNumberFormatter } from "@/lib/value-format";
+import { each, filter, findIndex, get, isNil, map, some, sortBy, toString } from "lodash";
+import { Parser } from "expr-eval";
 
 function nextOrderByDirection(direction: any) {
   switch (direction) {
@@ -197,19 +198,26 @@ export function prepareColumns(
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ key: a... Remove this comment to see the full error message
     result.render = (unused: any, row: any) => {
       let ruleResult: any = {};
+      let rowRecord = { ...row.record };
 
-      if (isValidConditionalFormatting() && column.conditionalFormatting.showRuleResult) {
+      if (isValidConditionalFormatting()) {
         const { value } = getRuleResult(row);
 
         if (value) {
-          ruleResult[column.name] = value;
+          if (column.conditionalFormatting.showColumnWithRuleResult) {
+            ruleResult[column.name] = value;
+          }
+          if (column.conditionalFormatting.replaceColumnWithRuleResult) {
+            const format = createNumberFormatter(column.conditionalFormatting.ruleResultFormat);
+            rowRecord[column.name] = format(value);
+          }
         }
       }
 
       return {
         children: (
           <Component
-            row={row.record}
+            row={rowRecord}
             ruleResultFormat={column.conditionalFormatting.ruleResultFormat}
             ruleResult={ruleResult}
           />
