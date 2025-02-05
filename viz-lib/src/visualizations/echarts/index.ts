@@ -11,8 +11,9 @@ const DEFAULT_OPTIONS = {
   selection: {
     multiSelectEnabled: false,
     defaultSelection: "",
+    multiSelectLabel: "",
   },
-  height: "",
+  height: "300px",
 };
 
 export default {

@@ -3,8 +3,8 @@ import createTabbedEditor from "@/components/visualizations/editor/createTabbedE
 import GeneralSettings from "./GeneralSettings";
 import getOptions from "@/visualizations/custom-table/getOptions";
 import GridSettings from "@/visualizations/custom-table/Editor/GridSettings";
-import TableOptionsSettings from "@/visualizations/custom-table/Editor/OptionsSettings";
 import OptionsSettings from "./OptionsSettings";
+import AppearanceSettings from "@/visualizations/custom-table/Editor/AppearanceSettings";
 
 export default createTabbedEditor([
   { key: "General", title: "General", component: GeneralSettings },
@@ -15,7 +15,7 @@ export default createTabbedEditor([
       return OptionsSettings({ options: getOptions(options, { columns: data.columns }), onOptionsChange });
     },
   },
-  { key: "Table Options", title: "Table Options", component: TableOptionsSettings },
+  { key: "Table Appearance", title: "Table Appearance", component: AppearanceSettings },
   {
     key: "Columns",
     title: "Columns",

@@ -101,6 +101,7 @@ export default function Renderer({ data, options, selected, setSelected }: any) 
         setConditionalFormattingActive(newConditionalFormattingActive);
       },
       options.selection?.multiSelectEnabled,
+      options.selection?.multiSelectLabel,
       multiSelectActive,
       (newMultiSelectActive: any) => {
         if (options.selectableColumns.find((item: any) => item === options.selection.defaultSelection)) {
