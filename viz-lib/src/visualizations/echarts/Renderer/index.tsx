@@ -29,10 +29,12 @@ export default function Renderer({ data, options }: any) {
       return;
     }
 
-    resizeHandler();
     setEcharts(echartsRef.current.echarts);
     setEchartsInstance(echartsRef.current.getEchartsInstance());
+
+    resizeHandler();
     window.addEventListener("resize", resizeHandler);
+    echartsRef.current.getEchartsInstance().resize();
 
     if (options.selectableColumns.find((item: any) => item === options.selection.defaultSelection)) {
       setSelected([options.selection.defaultSelection]);
@@ -48,6 +50,11 @@ export default function Renderer({ data, options }: any) {
   const resizeTableContainer = (element: any) => {
     const echartsHeight = options.height || "300px";
     const childElement = element.querySelector("div");
+
+    if (element.closest(".query-results") || element.closest(".query-results-wrapper")) {
+      element.style.position = "relative";
+      return;
+    }
 
     element.style.height = `calc(100% - ${echartsHeight})`;
     element.style.top = echartsHeight;
@@ -92,7 +99,6 @@ export default function Renderer({ data, options }: any) {
     <div ref={containerElRef} className="echarts-visualization-container">
       <ReactECharts
         ref={echartsRef}
-        notMerge={true}
         lazyUpdate={true}
         option={handleGetOptions()}
         style={{

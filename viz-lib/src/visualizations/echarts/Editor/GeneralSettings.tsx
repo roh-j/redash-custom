@@ -62,8 +62,9 @@ export default function GeneralSettings({ data, options, onOptionsChange }: any)
       <Section>
         <Space style={{ display: "flex" }} size="small">
           <Dropdown
+            trigger={["click"]}
             overlay={
-              <Menu>
+              <Menu style={{ maxHeight: "200px", overflow: "auto" }}>
                 {columns.map(column => (
                   <Menu.Item
                     key={column.value}
