@@ -4,6 +4,7 @@ import { visualizationsSettings } from "@/visualizations/visualizationsSettings"
 const DEFAULT_OPTIONS = {
   itemsPerPage: 25,
   paginationSize: "default", // not editable through Editor
+  conditionalFormattingEnabled: false,
   conditionalFormattingLabel: "",
   conditionalFormattingChecked: false,
 };

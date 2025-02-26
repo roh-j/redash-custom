@@ -55,6 +55,7 @@ function getOrderByInfo(orderBy: any) {
 }
 
 export function prepareColumns(
+  conditionalFormattingEnabled: any,
   conditionalFormattingLabel: any,
   conditionalFormattingActive: any,
   onConditionalFormattingActiveChange: any,
@@ -254,34 +255,38 @@ export function prepareColumns(
     ];
   }
 
-  tableColumns = [
-    {
-      key: "enhanced-table-option",
-      title: (
-        <React.Fragment>
-          <Checkbox
-            checked={conditionalFormattingActive}
-            onChange={e => {
-              onConditionalFormattingActiveChange(e.target.checked);
-            }}>
-            {conditionalFormattingLabel || "Conditional Formatting"}
-          </Checkbox>
-          {multiSelectEnabled && (
-            <Checkbox
-              checked={multiSelectActive}
-              onChange={e => {
-                onMultiSelectEnabledChange(e.target.checked);
-              }}>
-              {multiSelectLabel || "Multi Select"}
-            </Checkbox>
-          )}
-        </React.Fragment>
-      ),
-      // @ts-expect-error ts-migrate(2741) FIXME: Property 'onClick' is missing in type '{ className... Remove this comment to see the full error message
-      onHeaderCell: () => ({ className: "enhanced-table-visualization-toolbar" }),
-      children: tableColumns,
-    },
-  ];
+  if (conditionalFormattingEnabled || multiSelectEnabled) {
+    tableColumns = [
+      {
+        key: "enhanced-table-option",
+        title: (
+          <React.Fragment>
+            {conditionalFormattingEnabled && (
+              <Checkbox
+                checked={conditionalFormattingActive}
+                onChange={e => {
+                  onConditionalFormattingActiveChange(e.target.checked);
+                }}>
+                {conditionalFormattingLabel || "Conditional formatting"}
+              </Checkbox>
+            )}
+            {multiSelectEnabled && (
+              <Checkbox
+                checked={multiSelectActive}
+                onChange={e => {
+                  onMultiSelectEnabledChange(e.target.checked);
+                }}>
+                {multiSelectLabel || "Multi Select"}
+              </Checkbox>
+            )}
+          </React.Fragment>
+        ),
+        // @ts-expect-error ts-migrate(2741) FIXME: Property 'onClick' is missing in type '{ className... Remove this comment to see the full error message
+        onHeaderCell: () => ({ className: "enhanced-table-visualization-toolbar" }),
+        children: tableColumns,
+      },
+    ];
+  }
 
   return tableColumns;
 }

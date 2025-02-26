@@ -94,6 +94,7 @@ export default function Renderer({ data, options, selected, setSelected }: any) 
         <SearchInput searchColumns={searchColumns} onChange={(event: any) => setSearchTerm(event.target.value)} />
       ) : null;
     return prepareColumns(
+      options.conditionalFormattingEnabled,
       options.conditionalFormattingLabel,
       conditionalFormattingActive,
       (newConditionalFormattingActive: any) => {
@@ -151,6 +152,10 @@ export default function Renderer({ data, options, selected, setSelected }: any) 
   useEffect(() => {
     setConditionalFormattingActive(!!options.conditionalFormattingChecked);
   }, [options.conditionalFormattingChecked]);
+
+  useEffect(() => {
+    setConditionalFormattingActive(options.conditionalFormattingEnabled && !!options.conditionalFormattingChecked);
+  }, [options.conditionalFormattingEnabled]);
 
   useEffect(() => {
     if (!options.selection?.multiSelectEnabled) {
