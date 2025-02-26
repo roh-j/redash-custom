@@ -89,7 +89,7 @@ export default function GeneralSettings({ data, options, onOptionsChange }: any)
       {/* @ts-expect-error ts-migrate(2745) FIXME: This JSX tag's 'children' prop expects type 'never... Remove this comment to see the full error message */}
       <Section>
         <p style={{ fontSize: "13px" }}>
-          <span style={{ color: "blue" }}>function</span> <span style={{ color: "#0000A2" }}>getOptions</span>(
+          <span style={{ color: "blue" }}>function</span> <span style={{ color: "#0000A2" }}>getOption</span>(
           <span style={{ color: "rgb(49, 132, 149)" }}>rows</span>,{" "}
           <span style={{ color: "rgb(49, 132, 149)" }}>echarts</span>,{" "}
           <span style={{ color: "rgb(49, 132, 149)" }}>echartsInstance</span>,{" "}

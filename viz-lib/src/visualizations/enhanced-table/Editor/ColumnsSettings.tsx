@@ -36,14 +36,11 @@ export default function ColumnsSettings({ options, onOptionsChange }: any) {
       event.stopPropagation();
     }
 
-    const findedIndex = options.selectableColumns.findIndex((item: any) => item === columnName);
+    const newSelectableColumns = options.selectableColumns.includes(columnName)
+      ? options.selectableColumns.filter((item: any) => item !== columnName)
+      : [...options.selectableColumns, columnName];
 
-    if (findedIndex !== -1) {
-      options.selectableColumns.splice(findedIndex, 1);
-    } else {
-      options.selectableColumns.push(columnName);
-    }
-    onOptionsChange({ selectableColumns: options.selectableColumns });
+    onOptionsChange({ selectableColumns: newSelectableColumns });
   }
 
   return (

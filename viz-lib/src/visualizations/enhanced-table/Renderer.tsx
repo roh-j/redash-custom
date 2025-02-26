@@ -103,11 +103,11 @@ export default function Renderer({ data, options, selected, setSelected }: any) 
       options.selection?.multiSelectLabel,
       multiSelectActive,
       (newMultiSelectActive: any) => {
-        if (options.selectableColumns.find((item: any) => item === options.selection.defaultSelection)) {
-          setSelected([options.selection.defaultSelection]);
-        } else {
-          setSelected([]);
-        }
+        setSelected(
+          options.selectableColumns.includes(options.selection.defaultSelection)
+            ? [options.selection.defaultSelection]
+            : []
+        );
         setMultiSelectActive(newMultiSelectActive);
       },
       options.columns,
@@ -126,21 +126,16 @@ export default function Renderer({ data, options, selected, setSelected }: any) 
           return;
         }
 
-        let newSelected = [...selected];
-        const findedIndex = newSelected.findIndex((item: any) => item === columnName);
+        let newSelected = selected.includes(columnName)
+          ? selected.filter((item: any) => item !== columnName)
+          : multiSelectActive
+          ? [...selected, columnName]
+          : [columnName];
 
-        if (findedIndex !== -1) {
-          newSelected.splice(findedIndex, 1);
-
-          if (
-            !newSelected.length &&
-            options.selectableColumns.find((item: any) => item === options.selection.defaultSelection)
-          ) {
-            newSelected = [options.selection.defaultSelection];
-          }
-        } else {
-          newSelected = multiSelectActive ? [...newSelected, columnName] : [columnName];
+        if (newSelected.length === 0 && options.selectableColumns.includes(options.selection.defaultSelection)) {
+          newSelected = [options.selection.defaultSelection];
         }
+
         setSelected(newSelected);
       }
     );
@@ -154,11 +149,7 @@ export default function Renderer({ data, options, selected, setSelected }: any) 
   ]);
 
   useEffect(() => {
-    if (options.conditionalFormattingChecked) {
-      setConditionalFormattingActive(true);
-    } else {
-      setConditionalFormattingActive(false);
-    }
+    setConditionalFormattingActive(!!options.conditionalFormattingChecked);
   }, [options.conditionalFormattingChecked]);
 
   useEffect(() => {

@@ -152,16 +152,19 @@ export function prepareColumns(
       sortOrder: get(orderByInfo, [column.name, "direction"], null),
       title: (
         <React.Fragment>
-          {column.description && (
-            <span style={{ paddingRight: 5 }}>
-              <Tooltip placement="top" title={column.description}>
-                <div className="enhanced-table-visualization-heading">
-                  <i className="fa fa-info-circle" aria-hidden="true"></i>
-                </div>
-              </Tooltip>
-            </span>
-          )}
-          <Tooltip placement="top" title={column.title}>
+          <Tooltip
+            placement="top"
+            title={
+              column.description ? (
+                <>
+                  {column.description.split("\\n").map((str: string) => (
+                    <div>{str}</div>
+                  ))}
+                </>
+              ) : (
+                column.title
+              )
+            }>
             <div
               className="enhanced-table-visualization-heading"
               data-sort-column-index={sortColumnIndex}

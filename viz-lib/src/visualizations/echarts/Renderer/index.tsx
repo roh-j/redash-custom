@@ -12,16 +12,8 @@ export default function Renderer({ data, options }: any) {
   const [echartsInstance, setEchartsInstance] = useState<any>(null);
   const [selected, setSelected] = useState<string[]>([]);
 
-  const rows = data.rows;
-
   useEffect(() => {
-    const newSelected = selected.map((item: any) => {
-      if (options.selectableColumns.find((column: any) => column === item)) {
-        return item;
-      }
-    });
-
-    setSelected(newSelected);
+    setSelected(selected.filter((item: any) => options.selectableColumns.includes(item)));
   }, [options.selectableColumns]);
 
   useEffect(() => {
@@ -36,11 +28,9 @@ export default function Renderer({ data, options }: any) {
     window.addEventListener("resize", resizeHandler);
     echartsRef.current.getEchartsInstance().resize();
 
-    if (options.selectableColumns.find((item: any) => item === options.selection.defaultSelection)) {
-      setSelected([options.selection.defaultSelection]);
-    } else {
-      setSelected([]);
-    }
+    setSelected(
+      options.selectableColumns.includes(options.selection.defaultSelection) ? [options.selection.defaultSelection] : []
+    );
 
     return () => {
       window.addEventListener("resize", resizeHandler);
@@ -76,13 +66,15 @@ export default function Renderer({ data, options }: any) {
     }
   };
 
-  const handleGetOptions = () => {
+  const getEchartsOption = () => {
     let result = {};
 
     if (options.echartsOptions) {
       try {
-        const getOptions = new Function("rows", "echarts", "echartsInstance", "selected", options.echartsOptions);
-        const funcResult = getOptions(rows, echarts, echartsInstance, selected);
+        const rows = [...data.rows];
+
+        const getOption = new Function("rows", "echarts", "echartsInstance", "selected", options.echartsOptions);
+        const funcResult = getOption(rows, echarts, echartsInstance, selected);
 
         if (funcResult) {
           result = funcResult;
@@ -98,12 +90,13 @@ export default function Renderer({ data, options }: any) {
   return (
     <div ref={containerElRef} className="echarts-visualization-container">
       <ReactECharts
+        key={selected.join(",")}
         ref={echartsRef}
         lazyUpdate={true}
-        option={handleGetOptions()}
+        option={getEchartsOption()}
         style={{
           height: options.height || "300px",
-          ...(!Object.keys(handleGetOptions()).length && { background: "#edecec" }),
+          ...(!Object.keys(getEchartsOption()).length && { background: "#edecec" }),
         }}
       />
       {options.table.enabled && (
