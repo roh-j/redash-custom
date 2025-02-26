@@ -6,6 +6,7 @@ const DEFAULT_OPTIONS = {
   pivotCol: "",
   pivotRow: "",
   value: "",
+  valueResultFormat: "0,0",
   backgroundColor: "FFFFFF",
   opacityRangeMin: 0,
   opacityRangeMax: 1,

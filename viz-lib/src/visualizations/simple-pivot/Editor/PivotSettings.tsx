@@ -1,7 +1,7 @@
 import * as Grid from "antd/lib/grid";
 import ColorPalette from "@/visualizations/ColorPalette";
 import React from "react";
-import { ColorPicker, Input, InputNumber, Section, Select } from "@/components/visualizations/editor";
+import { ColorPicker, ContextHelp, Input, InputNumber, Section, Select } from "@/components/visualizations/editor";
 import { EditorPropTypes } from "@/visualizations/prop-types";
 import { filter, flatten, isString, map, merge, sortBy, toNumber, uniq } from "lodash";
 
@@ -61,6 +61,20 @@ export default function PivotSettings({ options, onOptionsChange }: any) {
           label="Value"
           defaultValue={options.value}
           onChange={(event: any) => updateOptions({ value: event.target.value })}
+        />
+      </Section>
+
+      {/* @ts-expect-error ts-migrate(2745) FIXME: This JSX tag's 'children' prop expects type 'never... Remove this comment to see the full error message */}
+      <Section>
+        <Input
+          label={
+            <React.Fragment>
+              Value result format
+              <ContextHelp.NumberFormatSpecs />
+            </React.Fragment>
+          }
+          defaultValue={options.valueResultFormat}
+          onChange={(event: any) => updateOptions({ valueResultFormat: event.target.value })}
         />
       </Section>
 

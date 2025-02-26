@@ -1,4 +1,5 @@
 import hexRgb from "hex-rgb";
+import { createNumberFormatter } from "@/lib/value-format";
 import { Parser } from "expr-eval";
 
 export function getPivotCols({ data, pivotRow, pivotCol, value }: any) {
@@ -51,6 +52,7 @@ export function getPivotRows({
   pivotCol,
   columns,
   value,
+  valueResultFormat,
   backgroundColor,
   opacityRangeMin,
   opacityRangeMax,
@@ -103,14 +105,19 @@ export function getPivotRows({
         valueCache[uniqueValueKey] = valueCache[uniqueValueKey] || 0;
       }
 
-      cache[column.name] = `<div style="background-color: ${
-        getBackgroundColor({
-          valueResult: valueCache[uniqueValueKey],
-          backgroundColor,
-          opacityRangeMin,
-          opacityRangeMax,
-        }).backgroundColor
-      };">${valueCache[uniqueValueKey]}</div>`;
+      const format = createNumberFormatter(valueResultFormat);
+      const style = getBackgroundColor({
+        valueResult: valueCache[uniqueValueKey],
+        backgroundColor,
+        opacityRangeMin,
+        opacityRangeMax,
+      });
+
+      cache[column.name] = `
+        <div style="background-color: ${style.backgroundColor};">
+          ${format(valueCache[uniqueValueKey])}
+        </div>
+      `;
     }
 
     if (isUnique) {

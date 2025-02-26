@@ -17,6 +17,7 @@ export default function Renderer({ data, options }: any) {
     pivotCol: options.pivotCol,
     columns,
     value: options.value,
+    valueResultFormat: options.valueResultFormat,
     backgroundColor: options.backgroundColor,
     opacityRangeMin: options.opacityRangeMin,
     opacityRangeMax: options.opacityRangeMax,
