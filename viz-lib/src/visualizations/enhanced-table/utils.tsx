@@ -158,7 +158,7 @@ export function prepareColumns(
           {column.description && (
             <span style={{ paddingRight: 5 }}>
               <Tooltip placement="top" title={column.description}>
-                <div className="custom-table-visualization-heading">
+                <div className="enhanced-table-visualization-heading">
                   <i className="fa fa-info-circle" aria-hidden="true"></i>
                 </div>
               </Tooltip>
@@ -166,7 +166,7 @@ export function prepareColumns(
           )}
           <Tooltip placement="top" title={column.title}>
             <div
-              className="custom-table-visualization-heading"
+              className="enhanced-table-visualization-heading"
               data-sort-column-index={sortColumnIndex}
               onClick={(event: any) => {
                 if (event) {
@@ -186,7 +186,7 @@ export function prepareColumns(
       ),
       onHeaderCell: () => ({
         className: cx({
-          "custom-table-visualization-column-is-sorted": isAscend || isDescend,
+          "enhanced-table-visualization-column-is-sorted": isAscend || isDescend,
         }),
         onClick: (event: any) => onOrderByChange(toggleOrderBy(column.name, orderBy, event.shiftKey)),
       }),
@@ -230,25 +230,25 @@ export function prepareColumns(
   });
 
   tableColumns.push({
-    key: "###Redash::Visualizations::CustomTable::Spacer###",
+    key: "###Redash::Visualizations::EnhancedTable::Spacer###",
     // @ts-expect-error ts-migrate(2322) FIXME: Type 'null' is not assignable to type 'string'.
     dataIndex: null,
     // @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'Element'.
     title: "",
-    className: "custom-table-visualization-spacer",
+    className: "enhanced-table-visualization-spacer",
     render: () => "",
     // @ts-expect-error ts-migrate(2741) FIXME: Property 'onClick' is missing in type '{ className... Remove this comment to see the full error message
-    onHeaderCell: () => ({ className: "custom-table-visualization-spacer" }),
+    onHeaderCell: () => ({ className: "enhanced-table-visualization-spacer" }),
   });
 
   if (searchInput) {
     // Add searchInput as the ColumnGroup for all table columns
     tableColumns = [
       {
-        key: "custom-table-search",
+        key: "enhanced-table-search",
         title: searchInput,
         // @ts-expect-error ts-migrate(2741) FIXME: Property 'onClick' is missing in type '{ className... Remove this comment to see the full error message
-        onHeaderCell: () => ({ className: "custom-table-visualization-search" }),
+        onHeaderCell: () => ({ className: "enhanced-table-visualization-search" }),
         children: tableColumns,
       },
     ];
@@ -256,7 +256,7 @@ export function prepareColumns(
 
   tableColumns = [
     {
-      key: "custom-table-option",
+      key: "enhanced-table-option",
       title: (
         <React.Fragment>
           <Checkbox
@@ -278,7 +278,7 @@ export function prepareColumns(
         </React.Fragment>
       ),
       // @ts-expect-error ts-migrate(2741) FIXME: Property 'onClick' is missing in type '{ className... Remove this comment to see the full error message
-      onHeaderCell: () => ({ className: "custom-table-visualization-toolbar" }),
+      onHeaderCell: () => ({ className: "enhanced-table-visualization-toolbar" }),
       children: tableColumns,
     },
   ];

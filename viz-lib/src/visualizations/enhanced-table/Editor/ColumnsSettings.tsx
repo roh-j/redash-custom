@@ -51,11 +51,11 @@ export default function ColumnsSettings({ options, onOptionsChange }: any) {
       axis="y"
       lockAxis="y"
       useDragHandle
-      helperClass="custom-table-editor-columns-dragged-item"
+      helperClass="enhanced-table-editor-columns-dragged-item"
       helperContainer={(container: any) => container.firstChild}
       onSortEnd={handleColumnsReorder}
       containerProps={{
-        className: "custom-table-visualization-editor-columns",
+        className: "enhanced-table-visualization-editor-columns",
       }}>
       {/* @ts-expect-error ts-migrate(2322) FIXME: Type 'Element' is not assignable to type 'null | u... Remove this comment to see the full error message */}
       <Collapse bordered={false} defaultActiveKey={[]} expandIconPosition="right">

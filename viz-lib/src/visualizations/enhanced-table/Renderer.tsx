@@ -44,11 +44,11 @@ function SearchInputInfoIcon({ searchColumns }: any) {
       arrowPointAtCenter
       placement="topRight"
       content={
-        <div className="custom-table-visualization-search-info-content">
+        <div className="enhanced-table-visualization-search-info-content">
           Search {getSearchColumns(searchColumns, { renderColumn: col => <code key={col.name}>{col.title}</code> })}
         </div>
       }>
-      <InfoCircleFilledIcon className="custom-table-visualization-search-info-icon" />
+      <InfoCircleFilledIcon className="enhanced-table-visualization-search-info-icon" />
     </Popover>
   );
 }
@@ -177,9 +177,9 @@ export default function Renderer({ data, options, selected, setSelected }: any) 
   }
 
   return (
-    <div className="custom-table-visualization-container">
+    <div className="enhanced-table-visualization-container">
       <Table
-        className="custom-table-fixed-header"
+        className="enhanced-table-fixed-header"
         data-percy="show-scrollbars"
         // @ts-expect-error ts-migrate(2322) FIXME: Type '{ key: any; dataIndex: string; align: any; s... Remove this comment to see the full error message
         columns={tableColumns}

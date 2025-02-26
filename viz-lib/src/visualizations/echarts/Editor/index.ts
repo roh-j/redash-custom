@@ -1,9 +1,9 @@
-import AppearanceSettings from "@/visualizations/custom-table/Editor/AppearanceSettings";
-import ColumnsSettings from "@/visualizations/custom-table/Editor/ColumnsSettings";
+import AppearanceSettings from "@/visualizations/enhanced-table/Editor/AppearanceSettings";
+import ColumnsSettings from "@/visualizations/enhanced-table/Editor/ColumnsSettings";
 import createTabbedEditor from "@/components/visualizations/editor/createTabbedEditor";
 import GeneralSettings from "./GeneralSettings";
-import getOptions from "@/visualizations/custom-table/getOptions";
-import GridSettings from "@/visualizations/custom-table/Editor/GridSettings";
+import getOptions from "@/visualizations/enhanced-table/getOptions";
+import GridSettings from "@/visualizations/enhanced-table/Editor/GridSettings";
 import OptionsSettings from "./OptionsSettings";
 
 export default createTabbedEditor([

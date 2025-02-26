@@ -49,7 +49,7 @@ export default function ColumnEditor({ column, onChange }: Props) {
   const AdditionalOptions = ColumnTypes[column.displayAs].Editor || null;
 
   return (
-    <div className="custom-table-visualization-editor-column">
+    <div className="enhanced-table-visualization-editor-column">
       {/* @ts-expect-error ts-migrate(2745) FIXME: This JSX tag's 'children' prop expects type 'never... Remove this comment to see the full error message */}
       <Section>
         {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element[]; gutter: number; type:... Remove this comment to see the full error message */}

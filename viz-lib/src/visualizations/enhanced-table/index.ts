@@ -3,8 +3,8 @@ import getOptions from "./getOptions";
 import Renderer from "./Renderer";
 
 export default {
-  type: "CUSTOM_TABLE",
-  name: "Custom Table",
+  type: "ENHANCED_TABLE",
+  name: "Enhanced Table",
   getOptions,
   Renderer,
   Editor,

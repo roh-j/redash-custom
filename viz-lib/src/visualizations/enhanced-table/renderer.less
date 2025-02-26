@@ -1,6 +1,6 @@
 @import "../variables";
 
-.custom-table-visualization-container {
+.enhanced-table-visualization-container {
   .ant-pagination.ant-table-pagination {
     float: none;
     display: block;
@@ -12,12 +12,12 @@
     overflow-x: auto;
   }
 
-  .custom-table-fixed-header {
+  .enhanced-table-fixed-header {
     table {
       border-top: 0;
 
-      th:not(.custom-table-visualization-search),
-      th:not(.custom-table-visualization-toolbar) {
+      th:not(.enhanced-table-visualization-search),
+      th:not(.enhanced-table-visualization-toolbar) {
         position: sticky !important;
         left: 0;
         top: 0;
@@ -40,7 +40,7 @@
       width: 1%;
     }
 
-    .custom-table-visualization-spacer {
+    .enhanced-table-visualization-spacer {
       padding-left: 0;
       padding-right: 0;
 
@@ -61,7 +61,7 @@
       }
 
       &:hover,
-      .custom-table-visualization-column-is-sorted {
+      .enhanced-table-visualization-column-is-sorted {
         .ant-table-column-sorter-up,
         .ant-table-column-sorter-down {
           opacity: 1;
@@ -71,7 +71,7 @@
       th {
         white-space: nowrap;
 
-        &.custom-table-visualization-search {
+        &.enhanced-table-visualization-search {
           padding-bottom: 0;
 
           .ant-table-header-column {
@@ -79,7 +79,7 @@
           }
         }
 
-        &.custom-table-visualization-toolbar {
+        &.enhanced-table-visualization-toolbar {
           padding-bottom: 0;
           text-align: left !important;
 
@@ -101,7 +101,7 @@
           padding-right: 3px;
         }
 
-        .custom-table-visualization-heading {
+        .enhanced-table-visualization-heading {
           display: inline-block;
           max-width: 200px;
           vertical-align: middle;
@@ -156,11 +156,11 @@
   /* END */
 }
 
-.custom-table-visualization-search-info-content {
+.enhanced-table-visualization-search-info-content {
   max-width: 400px;
 }
 
-.custom-table-visualization-search-info-icon {
+.enhanced-table-visualization-search-info-icon {
   margin: 0 5px 0 0;
 
   &:not(:hover):not(:active) {

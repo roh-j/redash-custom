@@ -14,7 +14,7 @@ import sankeyVisualization from "./sankey";
 import sunburstVisualization from "./sunburst";
 import tableVisualization from "./table";
 import wordCloudVisualization from "./word-cloud";
-import customTableVisualization from "./custom-table";
+import enhancedTableVisualization from "./enhanced-table";
 import echartsVisualization from "./echarts";
 
 type VisualizationConfig = {
@@ -93,7 +93,7 @@ each(
     sunburstVisualization,
     tableVisualization,
     wordCloudVisualization,
-    customTableVisualization,
+    enhancedTableVisualization,
     echartsVisualization,
   ]),
   registerVisualization

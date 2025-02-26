@@ -1,5 +1,5 @@
-import CustomTableRenderer from "../../custom-table/Renderer";
-import getOptions from "@/visualizations/custom-table/getOptions";
+import EnhancedTableRenderer from "../../enhanced-table/Renderer";
+import getOptions from "@/visualizations/enhanced-table/getOptions";
 import React, { useEffect, useRef, useState } from "react";
 import ReactECharts from "echarts-for-react";
 import { RendererPropTypes } from "@/visualizations/prop-types";
@@ -69,7 +69,7 @@ export default function Renderer({ data, options }: any) {
       return;
     }
 
-    const tableEl = containerElRef.current.querySelector(".custom-table-visualization-container");
+    const tableEl = containerElRef.current.querySelector(".enhanced-table-visualization-container");
 
     if (tableEl && (tableEl.closest(".query-fixed-layout") || tableEl.closest(".widget-visualization"))) {
       resizeTableContainer(tableEl);
@@ -107,7 +107,7 @@ export default function Renderer({ data, options }: any) {
         }}
       />
       {options.table.enabled && (
-        <CustomTableRenderer
+        <EnhancedTableRenderer
           data={data}
           options={getOptions(options, { columns: data.columns })}
           // @ts-expect-error ts-migrate(2322) FIXME: Type 'Dispatch<SetStateAction<null>>' is not assig... Remove this comment to see the full error message
