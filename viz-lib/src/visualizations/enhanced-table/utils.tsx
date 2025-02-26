@@ -98,7 +98,7 @@ export function prepareColumns(
 
     const getRuleResult = (row: any) => {
       const rule = column.conditionalFormatting.rule;
-      let result = { variables: [], value: 0 };
+      let result = 0;
 
       try {
         const parser = new Parser();
@@ -109,10 +109,7 @@ export function prepareColumns(
           return acc;
         }, {});
 
-        result = {
-          variables: variables,
-          value: Number(compiledExpr.evaluate(parameter)),
-        };
+        result = Number(compiledExpr.evaluate(parameter));
       } catch (error) {}
 
       return result;
@@ -133,7 +130,7 @@ export function prepareColumns(
       const { red, green, blue } = hexRgb(column.conditionalFormatting.backgroundColor);
       let opacity = 0;
 
-      const ruleResult = getRuleResult(row).value;
+      const ruleResult = getRuleResult(row);
       const opacityRangeMin = column.conditionalFormatting.opacityRangeMin;
       const opacityRangeMax = column.conditionalFormatting.opacityRangeMax;
 
