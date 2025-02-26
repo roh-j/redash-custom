@@ -1,37 +1,29 @@
 import * as echarts from "echarts";
 import EnhancedTableRenderer from "../../enhanced-table/Renderer";
 import getOptions from "@/visualizations/enhanced-table/getOptions";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactEChartsCore from "echarts-for-react/lib/core";
 import { RendererPropTypes } from "@/visualizations/prop-types";
 import "./theme";
 
 export default function Renderer({ data, options }: any) {
-  const containerElRef = useRef<any>(null);
-  const echartsCoreRef = useRef<any>(null);
-
+  const [container, setContainer] = useState<any>(null);
+  const [echartsCore, setEchartsCore] = useState<any>(null);
   const [echartsInstance, setEchartsInstance] = useState<any>(null);
   const [selected, setSelected] = useState<string[]>([]);
 
   useEffect(() => {
-    if (!echartsCoreRef.current) {
-      return;
+    if (container && echartsCore) {
+      const instance = echartsCore.getEchartsInstance();
+      setEchartsInstance(instance);
+      setSelected(
+        options.selectableColumns.includes(options.selection.defaultSelection)
+          ? [options.selection.defaultSelection]
+          : []
+      );
+      render();
     }
-
-    const instance = echartsCoreRef.current.getEchartsInstance();
-
-    resizeHandler();
-    window.addEventListener("resize", resizeHandler);
-
-    setEchartsInstance(instance);
-    setSelected(
-      options.selectableColumns.includes(options.selection.defaultSelection) ? [options.selection.defaultSelection] : []
-    );
-
-    return () => {
-      window.removeEventListener("resize", resizeHandler);
-    };
-  }, [options]);
+  }, [container, echartsCore, options]);
 
   useEffect(() => {
     if (!echartsInstance) {
@@ -39,9 +31,9 @@ export default function Renderer({ data, options }: any) {
     }
 
     echartsInstance.setOption(getEchartsOption(), true);
-  }, [selected, echartsInstance]);
+  }, [echartsInstance, selected, data]);
 
-  const resizeTable = (tableEl: any) => {
+  const renderEnhancedTable = (tableEl: any) => {
     const echartsHeight = options.height || "300px";
     const childEl = tableEl.querySelector("div");
 
@@ -58,15 +50,11 @@ export default function Renderer({ data, options }: any) {
     }
   };
 
-  const resizeHandler = () => {
-    if (!containerElRef.current) {
-      return;
-    }
-
-    const tableEl = containerElRef.current.querySelector(".enhanced-table-visualization-container");
+  const render = () => {
+    const tableEl = container.querySelector(".enhanced-table-visualization-container");
 
     if (tableEl && (tableEl.closest(".query-fixed-layout") || tableEl.closest(".widget-visualization"))) {
-      resizeTable(tableEl);
+      renderEnhancedTable(tableEl);
     }
   };
 
@@ -89,10 +77,10 @@ export default function Renderer({ data, options }: any) {
   };
 
   return (
-    <div ref={containerElRef} className="echarts-visualization-container">
+    <div ref={setContainer} className="echarts-visualization-container">
       <ReactEChartsCore
         echarts={echarts}
-        ref={echartsCoreRef}
+        ref={setEchartsCore}
         lazyUpdate={true}
         option={{}}
         theme="custom_theme"
