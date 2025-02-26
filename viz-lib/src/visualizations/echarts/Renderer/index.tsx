@@ -14,10 +14,6 @@ export default function Renderer({ data, options }: any) {
   const [selected, setSelected] = useState<string[]>([]);
 
   useEffect(() => {
-    setSelected(selected.filter((item: any) => options.selectableColumns.includes(item)));
-  }, [options.selectableColumns]);
-
-  useEffect(() => {
     if (!echartsCoreRef.current) {
       return;
     }
@@ -36,6 +32,14 @@ export default function Renderer({ data, options }: any) {
       window.removeEventListener("resize", resizeHandler);
     };
   }, [options]);
+
+  useEffect(() => {
+    if (!echartsInstance) {
+      return;
+    }
+
+    echartsInstance.setOption(getEchartsOption(), true);
+  }, [selected, echartsInstance]);
 
   const resizeTable = (tableEl: any) => {
     const echartsHeight = options.height || "300px";
@@ -87,15 +91,13 @@ export default function Renderer({ data, options }: any) {
   return (
     <div ref={containerElRef} className="echarts-visualization-container">
       <ReactEChartsCore
-        key={selected.join(",")}
         echarts={echarts}
         ref={echartsCoreRef}
         lazyUpdate={true}
-        option={getEchartsOption()}
+        option={{}}
         theme="custom_theme"
         style={{
           height: options.height || "300px",
-          ...(!Object.keys(getEchartsOption()).length && { background: "#edecec" }),
         }}
       />
       {options.table.enabled && (

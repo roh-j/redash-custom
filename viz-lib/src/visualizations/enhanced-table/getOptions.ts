@@ -65,7 +65,7 @@ function getDefaultColumnsOptions(columns: any) {
       replaceColumnWithRuleResult: false,
       backgroundColor: "FFFFFF",
       rule: "",
-      ruleResultFormat: "0.00",
+      ruleResultFormat: "0,0.00",
       opacityRangeMin: 0,
       opacityRangeMax: 1,
     },
