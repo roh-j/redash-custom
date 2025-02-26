@@ -3,7 +3,7 @@ import Beautify from "ace-builds/src-noconflict/ext-beautify";
 import Button from "antd/lib/button";
 import Dropdown from "antd/lib/dropdown";
 import Menu from "antd/lib/menu";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Space from "antd/lib/space";
 import { DownOutlined } from "@ant-design/icons";
 import { merge, trimStart } from "lodash";
@@ -26,6 +26,7 @@ const defaultEchartsOptions = trimStart(`
 
 export default function GeneralSettings({ data, options, onOptionsChange }: any) {
   const editorRef = useRef<any>(null);
+  const [hasChange, setHasChange] = useState<boolean>(false);
   const columns: Columns[] = data.columns.map(({ name }: any) => ({
     label: name,
     value: name,
@@ -39,13 +40,14 @@ export default function GeneralSettings({ data, options, onOptionsChange }: any)
     Beautify.beautify(editorRef.current.editor.session);
   };
 
-  const renderEcharts = () => {
+  const applyEchartsCode = () => {
     if (!editorRef.current) {
       return;
     }
 
     const value = editorRef.current.editor.session.getValue();
     onOptionsChange(merge({}, options, { echartsOptions: value }));
+    setHasChange(false);
   };
 
   useEffect(() => {
@@ -82,7 +84,7 @@ export default function GeneralSettings({ data, options, onOptionsChange }: any)
             </Button>
           </Dropdown>
           <Button onClick={handleBeautify}>Beautify</Button>
-          <Button onClick={renderEcharts}>Apply</Button>
+          <Button onClick={applyEchartsCode}>Apply{hasChange && " *"}</Button>
         </Space>
       </Section>
 
@@ -104,6 +106,11 @@ export default function GeneralSettings({ data, options, onOptionsChange }: any)
           editorProps={{ $blockScrolling: Infinity }}
           showPrintMargin={false}
           enableLiveAutocompletion={true}
+          onChange={(data: any) => {
+            if (options.echartsOptions !== data) {
+              setHasChange(true);
+            }
+          }}
         />
       </Section>
     </React.Fragment>

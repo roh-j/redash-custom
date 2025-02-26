@@ -26,7 +26,6 @@ export default function Renderer({ data, options }: any) {
 
     resizeHandler();
     window.addEventListener("resize", resizeHandler);
-    instance.resize();
 
     setEchartsInstance(instance);
     setSelected(
@@ -34,24 +33,24 @@ export default function Renderer({ data, options }: any) {
     );
 
     return () => {
-      window.addEventListener("resize", resizeHandler);
+      window.removeEventListener("resize", resizeHandler);
     };
   }, [options]);
 
-  const resizeTableContainer = (element: any) => {
+  const resizeTable = (tableEl: any) => {
     const echartsHeight = options.height || "300px";
-    const childElement = element.querySelector("div");
+    const childEl = tableEl.querySelector("div");
 
-    if (element.closest(".query-results") || element.closest(".query-results-wrapper")) {
-      element.style.position = "relative";
+    if (tableEl.closest(".query-results") || tableEl.closest(".query-results-wrapper")) {
+      tableEl.style.position = "relative";
       return;
     }
 
-    element.style.height = `calc(100% - ${echartsHeight})`;
-    element.style.top = echartsHeight;
+    tableEl.style.height = `calc(100% - ${echartsHeight})`;
+    tableEl.style.top = echartsHeight;
 
-    if (childElement) {
-      childElement.style.height = "100%";
+    if (childEl) {
+      childEl.style.height = "100%";
     }
   };
 
@@ -63,7 +62,7 @@ export default function Renderer({ data, options }: any) {
     const tableEl = containerElRef.current.querySelector(".enhanced-table-visualization-container");
 
     if (tableEl && (tableEl.closest(".query-fixed-layout") || tableEl.closest(".widget-visualization"))) {
-      resizeTableContainer(tableEl);
+      resizeTable(tableEl);
     }
   };
 
@@ -79,9 +78,7 @@ export default function Renderer({ data, options }: any) {
         if (funcResult) {
           result = funcResult;
         }
-      } catch (error) {
-        return {};
-      }
+      } catch (error) {}
     }
 
     return result;
