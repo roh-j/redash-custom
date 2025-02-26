@@ -137,7 +137,7 @@ export default function ColumnEditor({ column, onChange }: Props) {
               color={column.conditionalFormatting.backgroundColor}
               onChange={(backgroundColor: any) =>
                 handleChange({
-                  conditionalFormatting: { ...column.conditionalFormatting, backgroundColor: backgroundColor },
+                  conditionalFormatting: { ...column.conditionalFormatting, backgroundColor },
                 })
               }
               addonAfter={

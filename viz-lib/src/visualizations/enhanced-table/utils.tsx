@@ -141,7 +141,7 @@ export function prepareColumns(
         opacity = (ruleResult - opacityRangeMin) / (opacityRangeMax - opacityRangeMin);
       }
 
-      return { background: `rgba(${red}, ${green}, ${blue}, ${opacity})` };
+      return { backgroundColor: `rgba(${red}, ${green}, ${blue}, ${opacity})` };
     };
 
     const result = {
@@ -198,7 +198,7 @@ export function prepareColumns(
       let rowRecord = { ...row.record };
 
       if (isValidConditionalFormatting()) {
-        const { value } = getRuleResult(row);
+        const value = getRuleResult(row);
 
         if (value) {
           if (column.conditionalFormatting.showColumnWithRuleResult) {

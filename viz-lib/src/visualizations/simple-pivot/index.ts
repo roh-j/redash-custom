@@ -6,6 +6,9 @@ const DEFAULT_OPTIONS = {
   pivotCol: "",
   pivotRow: "",
   value: "",
+  backgroundColor: "FFFFFF",
+  opacityRangeMin: 0,
+  opacityRangeMax: 1,
 };
 
 export default {

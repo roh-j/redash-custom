@@ -1,6 +1,6 @@
-import EnhancedTableRenderer from "../../enhanced-table/Renderer";
-import getOptions from "@/visualizations/enhanced-table/getOptions";
+import getOptions from "@/visualizations/table/getOptions";
 import React from "react";
+import TableRenderer from "../../table/Renderer";
 import { getPivotCols, getPivotRows } from "../utils";
 import { RendererPropTypes } from "@/visualizations/prop-types";
 
@@ -17,9 +17,12 @@ export default function Renderer({ data, options }: any) {
     pivotCol: options.pivotCol,
     columns,
     value: options.value,
+    backgroundColor: options.backgroundColor,
+    opacityRangeMin: options.opacityRangeMin,
+    opacityRangeMax: options.opacityRangeMax,
   });
 
-  return <EnhancedTableRenderer data={{ columns, rows }} options={getOptions(options, { columns: columns })} />;
+  return <TableRenderer data={{ columns, rows }} options={getOptions(options, { columns: columns })} />;
 }
 
 Renderer.propTypes = RendererPropTypes;

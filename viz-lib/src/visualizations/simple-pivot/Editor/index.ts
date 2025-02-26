@@ -1,8 +1,7 @@
-import AppearanceSettings from "@/visualizations/enhanced-table/Editor/AppearanceSettings";
-import ColumnsSettings from "@/visualizations/enhanced-table/Editor/ColumnsSettings";
+import ColumnsSettings from "@/visualizations/table/Editor/ColumnsSettings";
 import createTabbedEditor from "@/components/visualizations/editor/createTabbedEditor";
-import getOptions from "@/visualizations/enhanced-table/getOptions";
-import GridSettings from "@/visualizations/enhanced-table/Editor/GridSettings";
+import getOptions from "@/visualizations/table/getOptions";
+import GridSettings from "@/visualizations/table/Editor/GridSettings";
 import PivotSettings from "./PivotSettings";
 import { getPivotCols } from "../utils";
 
@@ -14,7 +13,6 @@ export default createTabbedEditor([
       return PivotSettings({ options: getOptions(options, { columns: data.columns }), onOptionsChange });
     },
   },
-  { key: "Appearance", title: "Appearance", component: AppearanceSettings },
   {
     key: "Columns",
     title: "Columns",

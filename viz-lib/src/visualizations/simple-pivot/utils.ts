@@ -1,3 +1,4 @@
+import hexRgb from "hex-rgb";
 import { Parser } from "expr-eval";
 
 export function getPivotCols({ data, pivotRow, pivotCol, value }: any) {
@@ -30,7 +31,7 @@ export function getPivotCols({ data, pivotRow, pivotCol, value }: any) {
     columns.push({
       name: colLabel,
       friendly_name: colLabel,
-      type: "integer",
+      type: "string",
     });
   }
 
@@ -44,7 +45,16 @@ export function getPivotCols({ data, pivotRow, pivotCol, value }: any) {
   ];
 }
 
-export function getPivotRows({ data, pivotRow, pivotCol, columns, value }: any) {
+export function getPivotRows({
+  data,
+  pivotRow,
+  pivotCol,
+  columns,
+  value,
+  backgroundColor,
+  opacityRangeMin,
+  opacityRangeMax,
+}: any) {
   if (!(pivotRow && pivotCol && columns && value)) {
     return [];
   }
@@ -93,7 +103,14 @@ export function getPivotRows({ data, pivotRow, pivotCol, columns, value }: any) 
         valueCache[uniqueValueKey] = valueCache[uniqueValueKey] || 0;
       }
 
-      cache[column.name] = valueCache[uniqueValueKey];
+      cache[column.name] = `<div style="background-color: ${
+        getBackgroundColor({
+          valueResult: valueCache[uniqueValueKey],
+          backgroundColor,
+          opacityRangeMin,
+          opacityRangeMax,
+        }).backgroundColor
+      };">${valueCache[uniqueValueKey]}</div>`;
     }
 
     if (isUnique) {
@@ -105,4 +122,18 @@ export function getPivotRows({ data, pivotRow, pivotCol, columns, value }: any) 
   }
 
   return rows;
+}
+
+function getBackgroundColor({ valueResult, backgroundColor, opacityRangeMin, opacityRangeMax }: any) {
+  const { red, green, blue } = hexRgb(backgroundColor);
+  let opacity = 0;
+
+  if (valueResult >= opacityRangeMax) {
+    opacity = 1;
+  }
+  if (valueResult > opacityRangeMin && valueResult < opacityRangeMax) {
+    opacity = (valueResult - opacityRangeMin) / (opacityRangeMax - opacityRangeMin);
+  }
+
+  return { backgroundColor: `rgba(${red}, ${green}, ${blue}, ${opacity})` };
 }
