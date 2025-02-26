@@ -3,7 +3,7 @@ import Renderer from "./Renderer";
 import { merge } from "lodash";
 
 const DEFAULT_OPTIONS = {
-  echartsOptions: "",
+  echartsOption: "",
   table: {
     enabled: false,
   },

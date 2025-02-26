@@ -69,10 +69,10 @@ export default function Renderer({ data, options }: any) {
   const getEchartsOption = () => {
     let result = {};
 
-    if (options.echartsOptions) {
+    if (options.echartsOption) {
       try {
         const rows = [...data.rows];
-        const getOption = new Function("rows", "echarts", "echartsInstance", "selected", options.echartsOptions);
+        const getOption = new Function("rows", "echarts", "echartsInstance", "selected", options.echartsOption);
         const funcResult = getOption(rows, echarts, echartsInstance, selected);
 
         if (funcResult) {

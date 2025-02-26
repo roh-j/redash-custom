@@ -46,7 +46,7 @@ export default function GeneralSettings({ data, options, onOptionsChange }: any)
     }
 
     const value = editorRef.current.editor.session.getValue();
-    onOptionsChange(merge({}, options, { echartsOptions: value }));
+    onOptionsChange(merge({}, options, { echartsOption: value }));
     setHasChange(false);
   };
 
@@ -55,7 +55,7 @@ export default function GeneralSettings({ data, options, onOptionsChange }: any)
       return;
     }
 
-    editorRef.current.editor.session.setValue(!options.echartsOptions ? defaultEchartsOptions : options.echartsOptions);
+    editorRef.current.editor.session.setValue(!options.echartsOption ? defaultEchartsOptions : options.echartsOption);
   }, []);
 
   return (
@@ -107,7 +107,7 @@ export default function GeneralSettings({ data, options, onOptionsChange }: any)
           showPrintMargin={false}
           enableLiveAutocompletion={true}
           onChange={(data: any) => {
-            if (options.echartsOptions !== data) {
+            if (options.echartsOption !== data) {
               setHasChange(true);
             }
           }}

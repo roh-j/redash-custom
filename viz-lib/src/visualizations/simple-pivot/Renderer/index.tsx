@@ -29,7 +29,7 @@ export default function Renderer({ data, options }: any) {
 
     setColumns(newColumns);
     setRows(newRows);
-  }, [options]);
+  }, [options, data]);
 
   return (
     <React.Fragment>
