@@ -1,65 +1,71 @@
 import { Parser } from "expr-eval";
 
-export function getPivotColumns({ data, pivotRow, pivotColumn, value }: any) {
-  if (!(pivotRow && pivotColumn && value)) {
+export function getPivotCols({ data, pivotRow, pivotCol, value }: any) {
+  if (!(pivotRow && pivotCol && value)) {
     return [];
   }
 
-  const firstColumn = `${pivotRow}/${pivotColumn}`;
-  const columnkey: any = {};
   let columns = [];
+  const axisLabel = `${pivotRow}/${pivotCol}`;
+  const uniqueColLabel: any = {};
 
-  const pivotColumnInfo = data.columns.find((item: any) => item.name === pivotColumn);
-  const pivotRowInfo = data.columns.find((item: any) => item.name === pivotRow);
+  const pivotColData = data.columns.find((item: any) => item.name === pivotCol);
+  const pivotRowData = data.columns.find((item: any) => item.name === pivotRow);
 
-  for (let item of data.rows) {
-    const name = item[pivotColumnInfo.name];
+  for (let row of data.rows) {
+    let colLabel = "";
 
-    if (columnkey[name]) {
+    if (pivotColData.type === "datetime") {
+      colLabel = row[pivotColData.name].format("YYYY-MM-DD");
+    } else {
+      colLabel = row[pivotColData.name];
+    }
+
+    if (uniqueColLabel[colLabel]) {
       continue;
     }
 
-    columnkey[name] = true;
+    uniqueColLabel[colLabel] = true;
 
     columns.push({
-      name: name,
-      friendly_name: name,
+      name: colLabel,
+      friendly_name: colLabel,
       type: "integer",
     });
   }
 
   return [
     {
-      name: firstColumn,
-      friendly_name: firstColumn,
-      type: pivotRowInfo.type,
+      name: axisLabel,
+      friendly_name: axisLabel,
+      type: pivotRowData.type,
     },
     ...columns,
   ];
 }
 
-export function getPivotRows({ data, pivotRow, pivotColumn, columns, value }: any) {
-  if (!(pivotRow && pivotColumn && value)) {
+export function getPivotRows({ data, pivotRow, pivotCol, columns, value }: any) {
+  if (!(pivotRow && pivotCol && columns && value)) {
     return [];
   }
 
-  const firstColumn = `${pivotRow}/${pivotColumn}`;
-  let pivotCache: any = {};
+  let valueCache: any = {};
   let rows = [];
+  const axisLabel = `${pivotRow}/${pivotCol}`;
 
   for (let row of data.rows) {
-    let result: any = {};
+    let cache: any = {};
     let isUnique = false;
 
     for (let column of columns) {
-      if (column.name === `${pivotRow}/${pivotColumn}`) {
-        result[column.name] = row[pivotRow];
+      if (column.name === axisLabel) {
+        cache[column.name] = row[pivotRow];
         continue;
       }
 
-      const uniqueCacheKey = `${row[pivotRow]}/${column.name}`;
+      const uniqueValueKey = `${row[pivotRow]}/${column.name}`;
 
-      if (!pivotCache[uniqueCacheKey]) {
+      if (valueCache[uniqueValueKey] === undefined) {
         isUnique = true;
       }
 
@@ -68,21 +74,25 @@ export function getPivotRows({ data, pivotRow, pivotColumn, columns, value }: an
         const compiledExpr = parser.parse(value);
         const variables: any = compiledExpr.variables();
         const parameter = variables.reduce((acc: any, key: any) => {
-          acc[key] = key === "prev" ? pivotCache[uniqueCacheKey] || 0 : row[key];
+          acc[key] = row[key];
           return acc;
         }, {});
 
-        pivotCache[uniqueCacheKey] = Number(compiledExpr.evaluate(parameter));
-      } catch (error) {}
+        valueCache[uniqueValueKey] = Number(
+          compiledExpr.evaluate({ ...parameter, acc: valueCache[uniqueValueKey] || 0 })
+        );
+      } catch (error) {
+        valueCache[uniqueValueKey] = 0;
+      }
 
-      result[column.name] = pivotCache[uniqueCacheKey];
+      cache[column.name] = valueCache[uniqueValueKey];
     }
 
     if (isUnique) {
-      rows.push(result);
+      rows.push(cache);
     } else {
-      const findedIndex = rows.findIndex((item: any) => item[firstColumn] === row[pivotRow]);
-      rows.splice(findedIndex, 1, result);
+      const findedIndex = rows.findIndex((item: any) => item[axisLabel] === row[pivotRow]);
+      rows.splice(findedIndex, 1, cache);
     }
   }
 

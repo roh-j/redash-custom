@@ -1,20 +1,20 @@
 import EnhancedTableRenderer from "../../enhanced-table/Renderer";
 import getOptions from "@/visualizations/enhanced-table/getOptions";
 import React from "react";
-import { getPivotColumns, getPivotRows } from "../utils";
+import { getPivotCols, getPivotRows } from "../utils";
 import { RendererPropTypes } from "@/visualizations/prop-types";
 
 export default function Renderer({ data, options }: any) {
-  const columns = getPivotColumns({
+  const columns = getPivotCols({
     data,
     pivotRow: options.pivotRow,
-    pivotColumn: options.pivotColumn,
+    pivotCol: options.pivotCol,
     value: options.value,
   });
   const rows = getPivotRows({
     data,
     pivotRow: options.pivotRow,
-    pivotColumn: options.pivotColumn,
+    pivotCol: options.pivotCol,
     columns,
     value: options.value,
   });

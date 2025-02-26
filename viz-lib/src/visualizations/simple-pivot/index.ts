@@ -3,8 +3,8 @@ import Renderer from "./Renderer";
 import { merge } from "lodash";
 
 const DEFAULT_OPTIONS = {
+  pivotCol: "",
   pivotRow: "",
-  pivotColumn: "",
   value: "",
 };
 

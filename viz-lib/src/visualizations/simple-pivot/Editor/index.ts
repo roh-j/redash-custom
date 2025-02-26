@@ -4,7 +4,7 @@ import createTabbedEditor from "@/components/visualizations/editor/createTabbedE
 import getOptions from "@/visualizations/enhanced-table/getOptions";
 import GridSettings from "@/visualizations/enhanced-table/Editor/GridSettings";
 import PivotSettings from "./PivotSettings";
-import { getPivotColumns } from "../utils";
+import { getPivotCols } from "../utils";
 
 export default createTabbedEditor([
   {
@@ -19,10 +19,10 @@ export default createTabbedEditor([
     key: "Columns",
     title: "Columns",
     component: ({ data, options, onOptionsChange }: any) => {
-      const columns = getPivotColumns({
+      const columns = getPivotCols({
         data,
         pivotRow: options.pivotRow,
-        pivotColumn: options.pivotColumn,
+        pivotCol: options.pivotCol,
         value: options.value,
       });
 

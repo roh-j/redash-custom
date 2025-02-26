@@ -16,13 +16,13 @@ export default function PivotSettings({ options, onOptionsChange }: any) {
       {/* @ts-expect-error ts-migrate(2745) FIXME: This JSX tag's 'children' prop expects type 'never... Remove this comment to see the full error message */}
       <Section>
         <Select
-          label="Row"
+          label="Col"
           mode="default"
           allowClear
           showSearch
           placeholder="Choose column..."
-          value={options.pivotRow || undefined}
-          onChange={(column: any) => updateOptions({ columns: [], pivotRow: column || "" })}>
+          value={options.pivotCol || undefined}
+          onChange={(column: any) => updateOptions({ columns: [], pivotCol: column || "" })}>
           {map(columns, (c: any) => (
             // @ts-expect-error ts-migrate(2339) FIXME: Property 'Option' does not exist on type '({ class... Remove this comment to see the full error message
             <Select.Option key={c} value={c}>
@@ -36,13 +36,13 @@ export default function PivotSettings({ options, onOptionsChange }: any) {
       {/* @ts-expect-error ts-migrate(2745) FIXME: This JSX tag's 'children' prop expects type 'never... Remove this comment to see the full error message */}
       <Section>
         <Select
-          label="Column"
+          label="Row"
           mode="default"
           allowClear
           showSearch
           placeholder="Choose column..."
-          value={options.pivotColumn || undefined}
-          onChange={(column: any) => updateOptions({ columns: [], pivotColumn: column || "" })}>
+          value={options.pivotRow || undefined}
+          onChange={(column: any) => updateOptions({ columns: [], pivotRow: column || "" })}>
           {map(columns, (c: any) => (
             // @ts-expect-error ts-migrate(2339) FIXME: Property 'Option' does not exist on type '({ class... Remove this comment to see the full error message
             <Select.Option key={c} value={c}>
