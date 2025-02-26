@@ -1,14 +1,15 @@
+import * as echarts from "echarts";
 import EnhancedTableRenderer from "../../enhanced-table/Renderer";
 import getOptions from "@/visualizations/enhanced-table/getOptions";
 import React, { useEffect, useRef, useState } from "react";
-import ReactECharts from "echarts-for-react";
+import ReactEChartsCore from "echarts-for-react/lib/core";
 import { RendererPropTypes } from "@/visualizations/prop-types";
+import "./theme";
 
 export default function Renderer({ data, options }: any) {
   const containerElRef = useRef<any>(null);
-  const echartsRef = useRef<any>(null);
+  const echartsCoreRef = useRef<any>(null);
 
-  const [echarts, setEcharts] = useState<any>(null);
   const [echartsInstance, setEchartsInstance] = useState<any>(null);
   const [selected, setSelected] = useState<string[]>([]);
 
@@ -17,17 +18,17 @@ export default function Renderer({ data, options }: any) {
   }, [options.selectableColumns]);
 
   useEffect(() => {
-    if (!echartsRef.current) {
+    if (!echartsCoreRef.current) {
       return;
     }
 
-    setEcharts(echartsRef.current.echarts);
-    setEchartsInstance(echartsRef.current.getEchartsInstance());
+    const instance = echartsCoreRef.current.getEchartsInstance();
 
     resizeHandler();
     window.addEventListener("resize", resizeHandler);
-    echartsRef.current.getEchartsInstance().resize();
+    instance.resize();
 
+    setEchartsInstance(instance);
     setSelected(
       options.selectableColumns.includes(options.selection.defaultSelection) ? [options.selection.defaultSelection] : []
     );
@@ -72,7 +73,6 @@ export default function Renderer({ data, options }: any) {
     if (options.echartsOptions) {
       try {
         const rows = [...data.rows];
-
         const getOption = new Function("rows", "echarts", "echartsInstance", "selected", options.echartsOptions);
         const funcResult = getOption(rows, echarts, echartsInstance, selected);
 
@@ -89,11 +89,13 @@ export default function Renderer({ data, options }: any) {
 
   return (
     <div ref={containerElRef} className="echarts-visualization-container">
-      <ReactECharts
+      <ReactEChartsCore
         key={selected.join(",")}
-        ref={echartsRef}
+        echarts={echarts}
+        ref={echartsCoreRef}
         lazyUpdate={true}
         option={getEchartsOption()}
+        theme="custom_theme"
         style={{
           height: options.height || "300px",
           ...(!Object.keys(getEchartsOption()).length && { background: "#edecec" }),
