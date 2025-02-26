@@ -118,7 +118,7 @@ export function getPivotRows({
         <div style="background-color: ${
           style.backgroundColor
         }; position: absolute; width: 100%; height: 100%; left: 0; top: 0;"></div>
-        <span style="position: relative;">${format(valueCache[uniqueValueKey])}</span>
+        <span style="position: relative; color: #000000;">${format(valueCache[uniqueValueKey])}</span>
       `;
     }
 

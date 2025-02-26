@@ -36,11 +36,15 @@ export default function ColumnsSettings({ options, onOptionsChange }: any) {
       event.stopPropagation();
     }
 
-    const newSelectableColumns = options.selectableColumns.includes(columnName)
-      ? options.selectableColumns.filter((item: any) => item !== columnName)
-      : [...options.selectableColumns, columnName];
+    const findedIndex = options.selectableColumns.findIndex((item: any) => item === columnName);
 
-    onOptionsChange({ selectableColumns: newSelectableColumns });
+    if (findedIndex !== -1) {
+      options.selectableColumns.splice(findedIndex, 1);
+    } else {
+      options.selectableColumns.push(columnName);
+    }
+
+    onOptionsChange({ selectableColumns: options.selectableColumns });
   }
 
   return (
@@ -95,7 +99,7 @@ export default function ColumnsSettings({ options, onOptionsChange }: any) {
                   )}
                 </Tooltip>
                 {options.selectableColumns && (
-                  <Tooltip title="Enable Selection">
+                  <Tooltip title="Enable selection">
                     <div className="m-l-10">
                       <Checkbox
                         checked={

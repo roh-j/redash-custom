@@ -142,7 +142,7 @@ export function prepareColumns(
         opacity = (ruleResult - opacityRangeMin) / (opacityRangeMax - opacityRangeMin);
       }
 
-      return { backgroundColor: `rgba(${red}, ${green}, ${blue}, ${opacity})` };
+      return { backgroundColor: `rgba(${red}, ${green}, ${blue}, ${opacity})`, color: "#000000" };
     };
 
     const result = {
