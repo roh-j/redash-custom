@@ -85,7 +85,7 @@ export function getPivotRows({
 
       if (
         (pivotColData.type === "datetime" && row[pivotCol].locale("ko").format("YYYY-MM-DD (dd)") === column.name) ||
-        row[pivotRow].toString() === column.name
+        row[pivotCol].toString() === column.name
       ) {
         try {
           const parser = new Parser();

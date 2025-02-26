@@ -24,7 +24,12 @@ export default createTabbedEditor([
         value: options.value,
       });
 
-      return ColumnsSettings({ options: getOptions(options, { columns: columns }), onOptionsChange });
+      return ColumnsSettings({
+        options: getOptions(options, {
+          columns,
+        }),
+        onOptionsChange,
+      });
     },
   },
   { key: "Grid", title: "Grid", component: GridSettings },
