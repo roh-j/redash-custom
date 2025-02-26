@@ -1,8 +1,11 @@
+import { Parser } from "expr-eval";
+
 export function getPivotColumns({ data, pivotRow, pivotColumn, value }: any) {
   if (!(pivotRow && pivotColumn && value)) {
     return [];
   }
 
+  const firstColumn = `${pivotRow}/${pivotColumn}`;
   const columnkey: any = {};
   let columns = [];
 
@@ -21,14 +24,14 @@ export function getPivotColumns({ data, pivotRow, pivotColumn, value }: any) {
     columns.push({
       name: name,
       friendly_name: name,
-      type: pivotColumnInfo.type,
+      type: "integer",
     });
   }
 
   return [
     {
-      name: `${pivotRow}/${pivotColumn}`,
-      friendly_name: `${pivotRow}/${pivotColumn}`,
+      name: firstColumn,
+      friendly_name: firstColumn,
       type: pivotRowInfo.type,
     },
     ...columns,
@@ -40,25 +43,47 @@ export function getPivotRows({ data, pivotRow, pivotColumn, columns, value }: an
     return [];
   }
 
+  const firstColumn = `${pivotRow}/${pivotColumn}`;
   let pivotCache: any = {};
   let rows = [];
 
-  for (let item of data.rows) {
+  for (let row of data.rows) {
     let result: any = {};
+    let isUnique = false;
 
     for (let column of columns) {
       if (column.name === `${pivotRow}/${pivotColumn}`) {
-        result[column.name] = item[pivotRow];
+        result[column.name] = row[pivotRow];
         continue;
       }
 
-      const uniqueCacheKey = `${item[pivotRow]}/${column.name}`;
+      const uniqueCacheKey = `${row[pivotRow]}/${column.name}`;
 
-      pivotCache[uniqueCacheKey] = pivotCache[uniqueCacheKey] || 0 + item[value];
+      if (!pivotCache[uniqueCacheKey]) {
+        isUnique = true;
+      }
+
+      try {
+        const parser = new Parser();
+        const compiledExpr = parser.parse(value);
+        const variables: any = compiledExpr.variables();
+        const parameter = variables.reduce((acc: any, key: any) => {
+          acc[key] = key === "prev" ? pivotCache[uniqueCacheKey] || 0 : row[key];
+          return acc;
+        }, {});
+
+        pivotCache[uniqueCacheKey] = Number(compiledExpr.evaluate(parameter));
+      } catch (error) {}
+
       result[column.name] = pivotCache[uniqueCacheKey];
     }
 
-    rows.push(result);
+    if (isUnique) {
+      rows.push(result);
+    } else {
+      const findedIndex = rows.findIndex((item: any) => item[firstColumn] === row[pivotRow]);
+      rows.splice(findedIndex, 1, result);
+    }
   }
 
   return rows;

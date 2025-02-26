@@ -5,6 +5,7 @@ import { merge } from "lodash";
 const DEFAULT_OPTIONS = {
   pivotRow: "",
   pivotColumn: "",
+  value: "",
 };
 
 export default {
