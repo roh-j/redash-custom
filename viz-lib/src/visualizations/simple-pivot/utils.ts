@@ -1,6 +1,7 @@
 import hexRgb from "hex-rgb";
 import { createNumberFormatter } from "@/lib/value-format";
 import { Parser } from "expr-eval";
+import "moment/locale/ko";
 
 export function getPivotCols({ data, pivotRow, pivotCol, value }: any) {
   if (!(pivotRow && pivotCol && value)) {
@@ -18,7 +19,7 @@ export function getPivotCols({ data, pivotRow, pivotCol, value }: any) {
     let colLabel = "";
 
     if (pivotColData.type === "datetime") {
-      colLabel = row[pivotColData.name].format("YYYY-MM-DD");
+      colLabel = row[pivotColData.name].locale("ko").format("YYYY-MM-DD (dd)");
     } else {
       colLabel = row[pivotColData.name].toString();
     }
@@ -83,7 +84,7 @@ export function getPivotRows({
       }
 
       if (
-        (pivotColData.type === "datetime" && row[pivotCol].format("YYYY-MM-DD") === column.name) ||
+        (pivotColData.type === "datetime" && row[pivotCol].locale("ko").format("YYYY-MM-DD (dd)") === column.name) ||
         row[pivotRow].toString() === column.name
       ) {
         try {
