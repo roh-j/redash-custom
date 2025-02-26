@@ -219,6 +219,7 @@ export function prepareColumns(
         children: (
           <Component
             row={rowRecord}
+            conditionalFormattingActive={conditionalFormattingActive}
             ruleResultFormat={column.conditionalFormatting.ruleResultFormat}
             ruleResult={ruleResult}
           />

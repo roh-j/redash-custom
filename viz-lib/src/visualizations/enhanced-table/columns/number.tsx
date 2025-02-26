@@ -32,19 +32,21 @@ function Editor({ column, onChange }: Props) {
 }
 
 export default function initNumberColumn(column: any) {
-  const format = createNumberFormatter(
-    column.conditionalFormatting.replaceColumnWithRuleResult ? "" : column.numberFormat
-  );
+  const replaceColumnWithRuleResult = column.conditionalFormatting.replaceColumnWithRuleResult;
 
-  function prepareData(row: any) {
+  function prepareData(row: any, conditionalFormattingActive: any) {
+    const format = createNumberFormatter(
+      conditionalFormattingActive && replaceColumnWithRuleResult ? "" : column.numberFormat
+    );
+
     return {
       text: format(row[column.name]),
     };
   }
 
-  function NumberColumn({ row, ruleResultFormat, ruleResult }: any) {
+  function NumberColumn({ row, conditionalFormattingActive, ruleResultFormat, ruleResult }: any) {
     // eslint-disable-line react/prop-types
-    const { text } = prepareData(row);
+    const { text } = prepareData(row, conditionalFormattingActive);
     const format = createNumberFormatter(ruleResultFormat);
     return ruleResult[column.name] ? `${text}\n(${format(ruleResult[column.name])})` : text;
   }
