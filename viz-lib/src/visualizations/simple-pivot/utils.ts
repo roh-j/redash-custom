@@ -18,7 +18,7 @@ export function getPivotCols({ data, pivotRow, pivotCol, value }: any) {
     if (pivotColData.type === "datetime") {
       colLabel = row[pivotColData.name].format("YYYY-MM-DD");
     } else {
-      colLabel = row[pivotColData.name];
+      colLabel = row[pivotColData.name].toString();
     }
 
     if (uniqueColLabel[colLabel]) {
@@ -64,25 +64,33 @@ export function getPivotRows({ data, pivotRow, pivotCol, columns, value }: any) 
       }
 
       const uniqueValueKey = `${row[pivotRow]}/${column.name}`;
+      const pivotColData = data.columns.find((item: any) => item.name === pivotCol);
 
       if (valueCache[uniqueValueKey] === undefined) {
         isUnique = true;
       }
 
-      try {
-        const parser = new Parser();
-        const compiledExpr = parser.parse(value);
-        const variables: any = compiledExpr.variables();
-        const parameter = variables.reduce((acc: any, key: any) => {
-          acc[key] = row[key];
-          return acc;
-        }, {});
+      if (
+        (pivotColData.type === "datetime" && row[pivotCol].format("YYYY-MM-DD") === column.name) ||
+        row[pivotRow].toString() === column.name
+      ) {
+        try {
+          const parser = new Parser();
+          const compiledExpr = parser.parse(value);
+          const variables: any = compiledExpr.variables();
+          const parameter = variables.reduce((acc: any, key: any) => {
+            acc[key] = row[key];
+            return acc;
+          }, {});
 
-        valueCache[uniqueValueKey] = Number(
-          compiledExpr.evaluate({ ...parameter, acc: valueCache[uniqueValueKey] || 0 })
-        );
-      } catch (error) {
-        valueCache[uniqueValueKey] = 0;
+          valueCache[uniqueValueKey] = Number(
+            compiledExpr.evaluate({ ...parameter, acc: valueCache[uniqueValueKey] || 0 })
+          );
+        } catch (error) {
+          valueCache[uniqueValueKey] = 0;
+        }
+      } else {
+        valueCache[uniqueValueKey] = valueCache[uniqueValueKey] || 0;
       }
 
       cache[column.name] = valueCache[uniqueValueKey];
