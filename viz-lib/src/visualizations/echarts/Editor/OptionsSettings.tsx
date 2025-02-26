@@ -9,9 +9,7 @@ export default function OptionsSettings({ options, onOptionsChange }: any) {
   };
 
   const availableColumns = map(options.columns, c => c.name);
-  const columns = sortBy(
-    filter(uniq(flatten([availableColumns, options.selection.defaultSelection])), (v: any) => isString(v) && v !== "")
-  );
+  const columns = sortBy(filter(uniq(flatten([availableColumns])), (v: any) => isString(v) && v !== ""));
 
   return (
     <React.Fragment>

@@ -16,6 +16,7 @@ import tableVisualization from "./table";
 import wordCloudVisualization from "./word-cloud";
 import enhancedTableVisualization from "./enhanced-table";
 import echartsVisualization from "./echarts";
+import simplePivotVisualization from "./simple-pivot";
 
 type VisualizationConfig = {
   type: string;
@@ -95,6 +96,7 @@ each(
     wordCloudVisualization,
     enhancedTableVisualization,
     echartsVisualization,
+    simplePivotVisualization,
   ]),
   registerVisualization
 );
