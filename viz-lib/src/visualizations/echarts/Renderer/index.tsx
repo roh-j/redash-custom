@@ -11,6 +11,7 @@ export default function Renderer({ data, options }: any) {
   const [echartsCore, setEchartsCore] = useState<any>(null);
   const [echartsInstance, setEchartsInstance] = useState<any>(null);
   const [selected, setSelected] = useState<string[]>([]);
+  const [ruleResultRows, setRuleResultRows] = useState<any>([]);
 
   useEffect(() => {
     if (container && echartsCore) {
@@ -31,7 +32,7 @@ export default function Renderer({ data, options }: any) {
     }
 
     echartsInstance.setOption(getEchartsOption(), true);
-  }, [echartsInstance, selected, data]);
+  }, [echartsInstance, selected, data, ruleResultRows]);
 
   const renderEnhancedTable = (tableEl: any) => {
     const echartsHeight = options.height || "300px";
@@ -63,7 +64,7 @@ export default function Renderer({ data, options }: any) {
 
     if (options.echartsOption) {
       try {
-        const rows = [...data.rows];
+        const rows = options.selection.bindingRuleResultEnabled ? [...ruleResultRows] : [...data.rows];
         const getOption = new Function("rows", "echarts", "echartsInstance", "selected", options.echartsOption);
         const funcResult = getOption(rows, echarts, echartsInstance, selected);
 
@@ -95,6 +96,7 @@ export default function Renderer({ data, options }: any) {
           // @ts-expect-error ts-migrate(2322) FIXME: Type 'Dispatch<SetStateAction<null>>' is not assig... Remove this comment to see the full error message
           selected={selected}
           setSelected={setSelected}
+          setRuleResultRows={setRuleResultRows}
         />
       )}
     </div>

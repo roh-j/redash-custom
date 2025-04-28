@@ -54,6 +54,7 @@ function getOrderByInfo(orderBy: any) {
 }
 
 export function prepareColumns(
+  ruleResultCacheRows: any,
   conditionalFormattingEnabled: any,
   conditionalFormattingLabel: any,
   conditionalFormattingActive: any,
@@ -75,6 +76,8 @@ export function prepareColumns(
 
   const isMultiColumnSort = orderBy.length > 1;
   const orderByInfo = getOrderByInfo(orderBy);
+
+  let ruleResultCacheRecord: any = {};
 
   let tableColumns = map(columns, column => {
     // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
@@ -196,12 +199,14 @@ export function prepareColumns(
     const initColumn = ColumnTypes[column.displayAs];
     const Component = initColumn(column);
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ key: a... Remove this comment to see the full error message
-    result.render = (unused: any, row: any) => {
+    result.render = (unused: any, row: any, index: any) => {
       let ruleResult: any = {};
       let rowRecord = { ...row.record };
 
       if (rowRecord[column.name] !== null && isValidConditionalFormatting()) {
         const value = getRuleResult(row);
+
+        ruleResultCacheRecord[column.name] = value;
 
         if (column.conditionalFormatting.showColumnWithRuleResult) {
           ruleResult[column.name] = value;
@@ -209,7 +214,11 @@ export function prepareColumns(
         if (column.conditionalFormatting.replaceColumnWithRuleResult) {
           rowRecord[column.name] = value;
         }
+      } else {
+        ruleResultCacheRecord[column.name] = rowRecord[column.name];
       }
+
+      ruleResultCacheRows[index] = { ...ruleResultCacheRows[index], ...ruleResultCacheRecord };
 
       return {
         children: (

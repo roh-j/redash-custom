@@ -56,6 +56,20 @@ export default function OptionsSettings({ options, onOptionsChange }: any) {
 
       {/* @ts-expect-error ts-migrate(2745) FIXME: This JSX tag's 'children' prop expects type 'never... Remove this comment to see the full error message */}
       <Section>
+        {/* @ts-expect-error ts-migrate(2745) FIXME: This JSX tag's 'children' prop expects type 'never... Remove this comment to see the full error message */}
+        <Switch
+          // @ts-expect-error ts-migrate(2322) FIXME: Type 'any' is not assignable to type 'never'.
+          checked={options.selection.bindingRuleResultEnabled}
+          // @ts-expect-error ts-migrate(2322) FIXME: Type '(enabled: any) => any' is not assignable to ... Remove this comment to see the full error message
+          onChange={(enabled: any) =>
+            updateOptions({ selection: { ...options.selection, bindingRuleResultEnabled: enabled } })
+          }>
+          Binding Rule Result
+        </Switch>
+      </Section>
+
+      {/* @ts-expect-error ts-migrate(2745) FIXME: This JSX tag's 'children' prop expects type 'never... Remove this comment to see the full error message */}
+      <Section>
         <Select
           label="Default Selection"
           mode="default"

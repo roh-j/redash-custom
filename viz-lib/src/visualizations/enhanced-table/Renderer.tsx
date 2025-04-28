@@ -79,11 +79,13 @@ SearchInput.defaultProps = {
   onChange: () => {},
 };
 
-export default function Renderer({ data, options, selected, setSelected }: any) {
+export default function Renderer({ data, options, selected, setSelected, setRuleResultRows }: any) {
   const [conditionalFormattingActive, setConditionalFormattingActive] = useState(false);
   const [multiSelectActive, setMultiSelectActive] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [orderBy, setOrderBy] = useState([]);
+
+  const ruleResultCacheRows: any = [...data.rows];
 
   const searchColumns = useMemo(() => filter(options.columns, "allowSearch"), [options.columns]);
 
@@ -94,6 +96,7 @@ export default function Renderer({ data, options, selected, setSelected }: any) 
         <SearchInput searchColumns={searchColumns} onChange={(event: any) => setSearchTerm(event.target.value)} />
       ) : null;
     return prepareColumns(
+      ruleResultCacheRows,
       options.conditionalFormattingEnabled,
       options.conditionalFormattingLabel,
       conditionalFormattingActive,
@@ -148,6 +151,14 @@ export default function Renderer({ data, options, selected, setSelected }: any) 
     searchColumns,
     orderBy,
   ]);
+
+  useEffect(() => {
+    if (options.selection?.bindingRuleResultEnabled) {
+      setTimeout(() => {
+        setRuleResultRows(ruleResultCacheRows);
+      }, 10);
+    }
+  }, [options.selection?.bindingRuleResultEnabled, conditionalFormattingActive]);
 
   useEffect(() => {
     setConditionalFormattingActive(!!options.conditionalFormattingChecked);

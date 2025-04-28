@@ -10,6 +10,7 @@ const DEFAULT_OPTIONS = {
   selectableColumns: [],
   selection: {
     multiSelectEnabled: false,
+    bindingRuleResultEnabled: false,
     defaultSelection: "",
     multiSelectLabel: "",
   },
