@@ -4,7 +4,7 @@ import Popover from "antd/lib/popover";
 import React, { useEffect, useMemo, useState } from "react";
 import Table from "antd/lib/table";
 import { filter, get, initial, last, map, reduce } from "lodash";
-import { filterRows, initRows, prepareColumns, sortRows } from "./utils";
+import { filterRows, initRows, initRuleResultRows, prepareColumns, sortRows } from "./utils";
 import { RendererPropTypes } from "@/visualizations/prop-types";
 
 import "./renderer.less";
@@ -85,8 +85,6 @@ export default function Renderer({ data, options, selected, setSelected, setRule
   const [searchTerm, setSearchTerm] = useState("");
   const [orderBy, setOrderBy] = useState([]);
 
-  const ruleResultCacheRows: any = [...data.rows];
-
   const searchColumns = useMemo(() => filter(options.columns, "allowSearch"), [options.columns]);
 
   const tableColumns = useMemo(() => {
@@ -96,7 +94,6 @@ export default function Renderer({ data, options, selected, setSelected, setRule
         <SearchInput searchColumns={searchColumns} onChange={(event: any) => setSearchTerm(event.target.value)} />
       ) : null;
     return prepareColumns(
-      ruleResultCacheRows,
       options.conditionalFormattingEnabled,
       options.conditionalFormattingLabel,
       conditionalFormattingActive,
@@ -154,11 +151,9 @@ export default function Renderer({ data, options, selected, setSelected, setRule
 
   useEffect(() => {
     if (options.selection?.bindingRuleResultEnabled) {
-      setTimeout(() => {
-        setRuleResultRows(ruleResultCacheRows);
-      }, 10);
+      initRuleResultRows(conditionalFormattingActive, options.columns, data.rows, setRuleResultRows);
     }
-  }, [data, options.selection?.bindingRuleResultEnabled, conditionalFormattingActive]);
+  }, [options.selection?.bindingRuleResultEnabled, conditionalFormattingActive, data]);
 
   useEffect(() => {
     setConditionalFormattingActive(!!options.conditionalFormattingChecked);

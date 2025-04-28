@@ -53,8 +53,55 @@ function getOrderByInfo(orderBy: any) {
   return result;
 }
 
+function getConditionalFormattingRuleResult(column: any, record: any) {
+  const rule = column.conditionalFormatting.rule;
+  let result = 0;
+
+  try {
+    const parser = new Parser();
+    const compiledExpr = parser.parse(rule);
+    const variables: any = compiledExpr.variables();
+    const parameter = variables.reduce((acc: any, key: any) => {
+      acc[key] = record[key];
+      return acc;
+    }, {});
+
+    result = Number(compiledExpr.evaluate(parameter));
+  } catch (error) {}
+
+  return result;
+}
+
+function isValidConditionalFormatting(column: any, conditionalFormattingActive: boolean) {
+  const enabled = column.conditionalFormatting.enabled;
+  const backgroundColor = column.conditionalFormatting.backgroundColor;
+
+  return enabled && backgroundColor && conditionalFormattingActive;
+}
+
+function getConditionalFormattingStyle(column: any, record: any, conditionalFormattingActive: boolean) {
+  if (!isValidConditionalFormatting(column, conditionalFormattingActive)) {
+    return {};
+  }
+
+  const { red, green, blue } = hexRgb(column.conditionalFormatting.backgroundColor);
+  let opacity = 0;
+
+  const ruleResult = getConditionalFormattingRuleResult(column, record);
+  const opacityRangeMin = column.conditionalFormatting.opacityRangeMin;
+  const opacityRangeMax = column.conditionalFormatting.opacityRangeMax;
+
+  if (ruleResult >= opacityRangeMax) {
+    opacity = 1;
+  }
+  if (ruleResult > opacityRangeMin && ruleResult < opacityRangeMax) {
+    opacity = (ruleResult - opacityRangeMin) / (opacityRangeMax - opacityRangeMin);
+  }
+
+  return { backgroundColor: `rgba(${red}, ${green}, ${blue}, ${opacity})`, color: "#000000" };
+}
+
 export function prepareColumns(
-  ruleResultCacheRows: any,
   conditionalFormattingEnabled: any,
   conditionalFormattingLabel: any,
   conditionalFormattingActive: any,
@@ -77,8 +124,6 @@ export function prepareColumns(
   const isMultiColumnSort = orderBy.length > 1;
   const orderByInfo = getOrderByInfo(orderBy);
 
-  let ruleResultCacheRecord: any = {};
-
   let tableColumns = map(columns, column => {
     // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     const isAscend = orderByInfo[column.name] && orderByInfo[column.name].direction === "ascend";
@@ -88,64 +133,15 @@ export function prepareColumns(
     // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     const sortColumnIndex = isMultiColumnSort && orderByInfo[column.name] ? orderByInfo[column.name].index : null;
 
-    const getSelectableColumnStyle = (columnName: any) => {
+    function getSelectableColumnStyle(columnName: any) {
       if (!selectableColumns || !selectableColumns.find((item: any) => item === columnName)) {
         return {};
       }
       if (selected && selected.find((item: any) => item === columnName)) {
         return { borderBottom: "2px solid #2196f3" };
       }
-
       return { borderBottom: "2px solid #767676" };
-    };
-
-    const getRuleResult = (row: any) => {
-      const rule = column.conditionalFormatting.rule;
-      let result = 0;
-
-      try {
-        const parser = new Parser();
-        const compiledExpr = parser.parse(rule);
-        const variables: any = compiledExpr.variables();
-        const parameter = variables.reduce((acc: any, key: any) => {
-          acc[key] = row.record[key];
-          return acc;
-        }, {});
-
-        result = Number(compiledExpr.evaluate(parameter));
-      } catch (error) {}
-
-      return result;
-    };
-
-    const isValidConditionalFormatting = () => {
-      const enabled = column.conditionalFormatting.enabled;
-      const backgroundColor = column.conditionalFormatting.backgroundColor;
-
-      return enabled && backgroundColor && conditionalFormattingActive;
-    };
-
-    const getConditionalFormattingStyle = (row: any) => {
-      if (!isValidConditionalFormatting()) {
-        return {};
-      }
-
-      const { red, green, blue } = hexRgb(column.conditionalFormatting.backgroundColor);
-      let opacity = 0;
-
-      const ruleResult = getRuleResult(row);
-      const opacityRangeMin = column.conditionalFormatting.opacityRangeMin;
-      const opacityRangeMax = column.conditionalFormatting.opacityRangeMax;
-
-      if (ruleResult >= opacityRangeMax) {
-        opacity = 1;
-      }
-      if (ruleResult > opacityRangeMin && ruleResult < opacityRangeMax) {
-        opacity = (ruleResult - opacityRangeMin) / (opacityRangeMax - opacityRangeMin);
-      }
-
-      return { backgroundColor: `rgba(${red}, ${green}, ${blue}, ${opacity})`, color: "#000000" };
-    };
+    }
 
     const result = {
       key: column.name,
@@ -199,14 +195,12 @@ export function prepareColumns(
     const initColumn = ColumnTypes[column.displayAs];
     const Component = initColumn(column);
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ key: a... Remove this comment to see the full error message
-    result.render = (unused: any, row: any, index: any) => {
+    result.render = (unused: any, row: any) => {
       let ruleResult: any = {};
       let rowRecord = { ...row.record };
 
-      if (rowRecord[column.name] !== null && isValidConditionalFormatting()) {
-        const value = getRuleResult(row);
-
-        ruleResultCacheRecord[column.name] = value;
+      if (rowRecord[column.name] !== null && isValidConditionalFormatting(column, conditionalFormattingActive)) {
+        const value = getConditionalFormattingRuleResult(column, row.record);
 
         if (column.conditionalFormatting.showColumnWithRuleResult) {
           ruleResult[column.name] = value;
@@ -214,11 +208,7 @@ export function prepareColumns(
         if (column.conditionalFormatting.replaceColumnWithRuleResult) {
           rowRecord[column.name] = value;
         }
-      } else {
-        ruleResultCacheRecord[column.name] = rowRecord[column.name];
       }
-
-      ruleResultCacheRows[index] = { ...ruleResultCacheRows[index], ...ruleResultCacheRecord };
 
       return {
         children: (
@@ -229,7 +219,10 @@ export function prepareColumns(
             ruleResult={ruleResult}
           />
         ),
-        props: { className: `display-as-${column.displayAs}`, style: getConditionalFormattingStyle(row) },
+        props: {
+          className: `display-as-${column.displayAs}`,
+          style: getConditionalFormattingStyle(column, row.record, conditionalFormattingActive),
+        },
       };
     };
 
@@ -295,6 +288,35 @@ export function prepareColumns(
   }
 
   return tableColumns;
+}
+
+export function initRuleResultRows(
+  conditionalFormattingActive: boolean,
+  columns: any,
+  rows: any,
+  setRuleResultRows: any
+) {
+  columns = filter(columns, "visible");
+  columns = sortBy(columns, "order");
+
+  const ruleResultRows = [...rows];
+
+  map(columns, column => {
+    let ruleResultRecord: any = {};
+
+    map(rows, (record: any, index: any) => {
+      if (record[column.name] !== null && isValidConditionalFormatting(column, conditionalFormattingActive)) {
+        const value = getConditionalFormattingRuleResult(column, record);
+        ruleResultRecord[column.name] = value;
+      }
+
+      ruleResultRows[index] = { ...ruleResultRows[index], ...ruleResultRecord };
+    });
+  });
+
+  setTimeout(() => {
+    setRuleResultRows(ruleResultRows);
+  }, 10);
 }
 
 export function initRows(rows: any) {
