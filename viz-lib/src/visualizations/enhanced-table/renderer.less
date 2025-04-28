@@ -16,6 +16,7 @@
     table {
       border-top: 0;
 
+      .ant-table-thead,
       th:not(.enhanced-table-visualization-search),
       th:not(.enhanced-table-visualization-toolbar) {
         position: sticky !important;
@@ -24,6 +25,16 @@
         border-top: 0;
         z-index: 1;
         background: #fafafa !important;
+      }
+
+      .ant-table-thead > tr > th {
+        background: none;
+      }
+
+      .enhanced-table-visualization-toolbar-checkbox {
+        position: sticky !important;
+        left: 10px;
+        top: 0;
       }
     }
   }
