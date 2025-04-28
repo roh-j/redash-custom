@@ -59,6 +59,7 @@ function getDefaultColumnsOptions(columns: any) {
     // `string` cell options
     allowHTML: true,
     highlightLinks: false,
+    changeIndicatorEnabled: false,
     conditionalFormatting: {
       enabled: false,
       showColumnWithRuleResult: true,

@@ -49,8 +49,8 @@ export default function initTextColumn(column: any) {
     // eslint-disable-line react/prop-types
     const { text } = prepareData(row);
     const format = createNumberFormatter(ruleResultFormat);
-    const appendedText = ruleResult[column.name] ? `${text}\n(${format(ruleResult[column.name])})` : text;
-    return column.allowHTML ? <HtmlContent>{appendedText}</HtmlContent> : appendedText;
+    const textResult = ruleResult[column.name] !== undefined ? `${text}\n(${format(ruleResult[column.name])})` : text;
+    return column.allowHTML ? <HtmlContent>{textResult}</HtmlContent> : textResult;
   }
 
   TextColumn.prepareData = prepareData;

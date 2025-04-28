@@ -4,7 +4,6 @@ import cx from "classnames";
 import hexRgb from "hex-rgb";
 import React from "react";
 import Tooltip from "antd/lib/tooltip";
-import { createNumberFormatter } from "@/lib/value-format";
 import { each, filter, findIndex, get, isNil, map, some, sortBy, toString } from "lodash";
 import { Parser } from "expr-eval";
 
@@ -201,17 +200,14 @@ export function prepareColumns(
       let ruleResult: any = {};
       let rowRecord = { ...row.record };
 
-      if (isValidConditionalFormatting()) {
+      if (rowRecord[column.name] !== null && isValidConditionalFormatting()) {
         const value = getRuleResult(row);
 
-        if (value) {
-          if (column.conditionalFormatting.showColumnWithRuleResult) {
-            ruleResult[column.name] = value;
-          }
-          if (column.conditionalFormatting.replaceColumnWithRuleResult) {
-            const format = createNumberFormatter(column.conditionalFormatting.ruleResultFormat);
-            rowRecord[column.name] = format(value);
-          }
+        if (column.conditionalFormatting.showColumnWithRuleResult) {
+          ruleResult[column.name] = value;
+        }
+        if (column.conditionalFormatting.replaceColumnWithRuleResult) {
+          rowRecord[column.name] = value;
         }
       }
 
