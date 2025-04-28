@@ -158,7 +158,7 @@ export default function Renderer({ data, options, selected, setSelected, setRule
         setRuleResultRows(ruleResultCacheRows);
       }, 10);
     }
-  }, [options.selection?.bindingRuleResultEnabled, conditionalFormattingActive]);
+  }, [data, options.selection?.bindingRuleResultEnabled, conditionalFormattingActive]);
 
   useEffect(() => {
     setConditionalFormattingActive(!!options.conditionalFormattingChecked);
