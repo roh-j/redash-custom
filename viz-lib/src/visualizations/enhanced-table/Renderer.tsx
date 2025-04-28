@@ -142,16 +142,27 @@ export default function Renderer({ data, options, selected, setSelected, setRule
     );
   }, [conditionalFormattingActive, multiSelectActive, options.columns, searchColumns, orderBy]);
 
-  const preparedRows = useMemo(() => sortRows(filterRows(initRows(data.rows), searchTerm, searchColumns), orderBy), [
-    data.rows,
-    searchTerm,
-    searchColumns,
-    orderBy,
-  ]);
+  const preparedRows = useMemo(
+    () =>
+      sortRows(
+        conditionalFormattingActive,
+        options.columns,
+        filterRows(
+          initRows(initRuleResultRows(conditionalFormattingActive, options.columns, data.rows)),
+          searchTerm,
+          searchColumns
+        ),
+        filterRows(initRows(data.rows), searchTerm, searchColumns),
+        orderBy
+      ),
+    [conditionalFormattingActive, data.rows, searchTerm, searchColumns, orderBy]
+  );
 
   useEffect(() => {
     if (options.selection?.bindingRuleResultEnabled) {
-      initRuleResultRows(conditionalFormattingActive, options.columns, data.rows, setRuleResultRows);
+      setTimeout(() => {
+        setRuleResultRows(initRuleResultRows(conditionalFormattingActive, options.columns, data.rows));
+      }, 10);
     }
   }, [options.selection?.bindingRuleResultEnabled, conditionalFormattingActive, data]);
 

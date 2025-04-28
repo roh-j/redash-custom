@@ -290,12 +290,7 @@ export function prepareColumns(
   return tableColumns;
 }
 
-export function initRuleResultRows(
-  conditionalFormattingActive: boolean,
-  columns: any,
-  rows: any,
-  setRuleResultRows: any
-) {
+export function initRuleResultRows(conditionalFormattingActive: boolean, columns: any, rows: any) {
   columns = filter(columns, "visible");
   columns = sortBy(columns, "order");
 
@@ -309,14 +304,11 @@ export function initRuleResultRows(
         const value = getConditionalFormattingRuleResult(column, record);
         ruleResultRecord[column.name] = value;
       }
-
       ruleResultRows[index] = { ...ruleResultRows[index], ...ruleResultRecord };
     });
   });
 
-  setTimeout(() => {
-    setRuleResultRows(ruleResultRows);
-  }, 10);
+  return ruleResultRows;
 }
 
 export function initRows(rows: any) {
@@ -345,31 +337,49 @@ export function filterRows(rows: any, searchTerm: any, searchColumns: any) {
   return rows;
 }
 
-export function sortRows(rows: any, orderBy: any) {
+export function sortRows(
+  conditionalFormattingActive: boolean,
+  columns: any,
+  ruleResultRows: any,
+  rows: any,
+  orderBy: any
+) {
   if (orderBy.length === 0 || rows.length === 0) {
     return rows;
   }
 
   const directions = { ascend: 1, descend: -1 };
+  let replaceColumnWithRuleResult = false;
+
+  for (const column of columns) {
+    if (column.name === orderBy[0].name) {
+      replaceColumnWithRuleResult = column?.conditionalFormatting?.replaceColumnWithRuleResult;
+    }
+  }
 
   // Create a copy of array before sorting, because .sort() will modify original array
-  return [...rows].sort((a, b) => {
+  const sortedRows = (conditionalFormattingActive && replaceColumnWithRuleResult
+    ? [...ruleResultRows]
+    : [...rows]
+  ).sort((a: any, b: any) => {
     let va;
     let vb;
-    for (let i = 0; i < orderBy.length; i += 1) {
-      va = a.record[orderBy[i].name];
-      vb = b.record[orderBy[i].name];
-      if (isNil(va) || va < vb) {
-        // if a < b - we should return -1, but take in account direction
-        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
-        return -1 * directions[orderBy[i].direction];
-      }
-      if (va > vb || isNil(vb)) {
-        // if a > b - we should return 1, but take in account direction
-        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
-        return 1 * directions[orderBy[i].direction];
-      }
+    va = a.record[orderBy[0].name];
+    vb = b.record[orderBy[0].name];
+    if (isNil(va) || va < vb) {
+      // if a < b - we should return -1, but take in account direction
+      // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
+      return -1 * directions[orderBy[0].direction];
+    }
+    if (va > vb || isNil(vb)) {
+      // if a > b - we should return 1, but take in account direction
+      // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
+      return 1 * directions[orderBy[0].direction];
     }
     return 0;
   });
+
+  return conditionalFormattingActive && replaceColumnWithRuleResult
+    ? sortedRows.map((item: any) => rows[item.key.replace("record", "")])
+    : sortedRows;
 }
